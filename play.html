@@ -6,85 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Playing - H5 Game Station</title>
     <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
-    <header>
-        <h1><a href="index.html">🎮 <span id="site-title">H5 Game Station</span></a></h1>
-        <div class="header-right">
-            <div class="lang-switch">
-                <button onclick="switchLang('zh')" class="lang-btn" id="lang-zh">中文</button>
-                <button onclick="switchLang('en')" class="lang-btn" id="lang-en">EN</button>
-            </div>
-        </div>
-    </header>
-
-    <div class="game-layout">
-        <!-- 游戏主区域 -->
-        <div class="game-main">
-            <div class="game-controls">
-                <a href="index.html" class="back-btn" id="back-btn">← Back</a>
-                <div class="game-title-area">
-                    <span id="game-title-display">Loading...</span>
-                    <span id="game-controls-display"></span>
-                </div>
-                <button class="fullscreen-btn" onclick="toggleFullScreen()" id="fullscreen-btn">Fullscreen</button>
-            </div>
-
-            <!-- 点击开始游戏覆盖层 -->
-            <div id="click-to-play" class="click-to-play">
-                <div class="click-content">
-                    <div class="play-button-large">▶</div>
-                    <p id="click-text">Click to Play</p>
-                </div>
-            </div>
-
-            <iframe id="game-frame" class="game-frame" src="" allowfullscreen
-                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-pointer-lock"></iframe>
-        </div>
-
-        <!-- 侧边栏 -->
-        <div class="game-sidebar">
-
-            <!-- 广告位 -->
-            <div class="ad-space ad-sidebar">
-                Google Adsense 300x250
-            </div>
-
-            <!-- 游戏信息卡片 -->
-            <div class="info-card">
-                <h3 id="info-title">Game Info</h3>
-                <p id="game-desc-display" class="info-desc">Loading...</p>
-                <div class="info-row">
-                    <span class="info-label" id="category-label">Category:</span>
-                    <span id="game-category-display" class="game-tag">-</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label" id="controls-label">Controls:</span>
-                    <span id="game-controls-info" class="info-value">-</span>
-                </div>
-            </div>
-
-            <!-- 更多游戏推荐 -->
-            <div class="info-card">
-                <h3 id="more-games-title">More Games</h3>
-                <div id="more-games" class="more-games-grid">
-                    <!-- JS 填充 -->
-                </div>
-            </div>
-
-            <div class="info-card">
-                <h3 id="tips-title">Tips</h3>
-                <p id="tips-content" class="info-desc tips-text"></p>
-                <a id="direct-link" href="#" target="_blank" class="source-link">
-                    🔗 <span id="source-text">Play on Source</span>
-                </a>
-            </div>
-
-        </div>
-    </div>
-
     <style>
         .game-main {
             position: relative;
@@ -94,7 +15,6 @@
             position: absolute;
             inset: 0;
             top: 52px;
-            /* 控制栏高度 */
             background: linear-gradient(135deg, var(--card-bg), #252540);
             display: flex;
             align-items: center;
@@ -230,6 +150,49 @@
             object-fit: cover;
         }
 
+        /* ========== 全屏模式样式 ========== */
+        .fullscreen-container {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: #000;
+        }
+
+        .fullscreen-container.active {
+            display: block;
+        }
+
+        .fullscreen-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .fullscreen-exit-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 10000;
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--accent-color);
+            border-radius: 25px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: none;
+        }
+
+        .fullscreen-container.active .fullscreen-exit-btn {
+            display: block;
+        }
+
+        .fullscreen-exit-btn:hover {
+            background: var(--accent-color);
+        }
+
         /* 移动端优化 */
         @media (max-width: 768px) {
             .game-layout {
@@ -262,8 +225,102 @@
                 height: 80px;
                 font-size: 32px;
             }
+
+            .fullscreen-exit-btn {
+                top: auto;
+                bottom: 20px;
+                right: 50%;
+                transform: translateX(50%);
+                padding: 12px 30px;
+                font-size: 16px;
+            }
         }
     </style>
+</head>
+
+<body>
+
+    <header>
+        <h1><a href="index.html">🎮 <span id="site-title">H5 Game Station</span></a></h1>
+        <div class="header-right">
+            <div class="lang-switch">
+                <button onclick="switchLang('zh')" class="lang-btn" id="lang-zh">中文</button>
+                <button onclick="switchLang('en')" class="lang-btn" id="lang-en">EN</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="game-layout">
+        <!-- 游戏主区域 -->
+        <div class="game-main">
+            <div class="game-controls">
+                <a href="index.html" class="back-btn" id="back-btn">← Back</a>
+                <div class="game-title-area">
+                    <span id="game-title-display">Loading...</span>
+                    <span id="game-controls-display"></span>
+                </div>
+                <button class="fullscreen-btn" onclick="enterFullscreen()" id="fullscreen-btn">Fullscreen</button>
+            </div>
+
+            <!-- 点击开始游戏覆盖层 -->
+            <div id="click-to-play" class="click-to-play">
+                <div class="click-content">
+                    <div class="play-button-large">▶</div>
+                    <p id="click-text">Click to Play</p>
+                </div>
+            </div>
+
+            <iframe id="game-frame" class="game-frame" src="" allowfullscreen
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-pointer-lock"></iframe>
+        </div>
+
+        <!-- 侧边栏 -->
+        <div class="game-sidebar">
+
+            <!-- 广告位 -->
+            <div class="ad-space ad-sidebar">
+                Google Adsense 300x250
+            </div>
+
+            <!-- 游戏信息卡片 -->
+            <div class="info-card">
+                <h3 id="info-title">Game Info</h3>
+                <p id="game-desc-display" class="info-desc">Loading...</p>
+                <div class="info-row">
+                    <span class="info-label" id="category-label">Category:</span>
+                    <span id="game-category-display" class="game-tag">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label" id="controls-label">Controls:</span>
+                    <span id="game-controls-info" class="info-value">-</span>
+                </div>
+            </div>
+
+            <!-- 更多游戏推荐 -->
+            <div class="info-card">
+                <h3 id="more-games-title">More Games</h3>
+                <div id="more-games" class="more-games-grid">
+                    <!-- JS 填充 -->
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3 id="tips-title">Tips</h3>
+                <p id="tips-content" class="info-desc tips-text"></p>
+                <a id="direct-link" href="#" target="_blank" class="source-link">
+                    🔗 <span id="source-text">Play on Source</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 真正的全屏容器 -->
+    <div id="fullscreen-container" class="fullscreen-container">
+        <button class="fullscreen-exit-btn" onclick="exitFullscreen()" id="exit-btn">✕ 退出全屏</button>
+        <iframe id="fullscreen-frame" src="" allowfullscreen
+            sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-pointer-lock"></iframe>
+    </div>
 
     <script src="games.js"></script>
     <script>
@@ -274,6 +331,8 @@
         // 查找游戏
         const game = getGameById(gameId);
         const frame = document.getElementById('game-frame');
+        const fullscreenFrame = document.getElementById('fullscreen-frame');
+        const fullscreenContainer = document.getElementById('fullscreen-container');
         const clickToPlay = document.getElementById('click-to-play');
         let gameLoaded = false;
 
@@ -292,6 +351,7 @@
             document.getElementById('source-text').textContent = t('sourceLink');
             document.getElementById('more-games-title').textContent = t('moreGames');
             document.getElementById('click-text').textContent = t('clickToPlay');
+            document.getElementById('exit-btn').textContent = '✕ ' + t('exitFullscreen');
         }
 
         // 点击开始游戏
@@ -342,17 +402,68 @@
             `).join('');
         }
 
-        // 全屏功能
-        function toggleFullScreen() {
-            const elem = document.querySelector(".game-main");
-            if (!document.fullscreenElement) {
-                elem.requestFullscreen().catch(err => console.log(err));
-                document.getElementById('fullscreen-btn').textContent = t('exitFullscreen');
-            } else {
-                document.exitFullscreen();
-                document.getElementById('fullscreen-btn').textContent = t('fullscreen');
+        // ========== 全屏功能 ==========
+        function enterFullscreen() {
+            if (!game) return;
+
+            // 确保游戏已加载
+            if (!gameLoaded) {
+                startGame();
             }
+
+            // 设置全屏iframe的src
+            fullscreenFrame.src = game.url;
+
+            // 显示全屏容器
+            fullscreenContainer.classList.add('active');
+
+            // 尝试使用浏览器全屏API
+            if (fullscreenContainer.requestFullscreen) {
+                fullscreenContainer.requestFullscreen().catch(err => {
+                    // 如果全屏API失败，仍然显示我们的全屏覆盖层
+                    console.log('Fullscreen API not available, using overlay mode');
+                });
+            } else if (fullscreenContainer.webkitRequestFullscreen) {
+                fullscreenContainer.webkitRequestFullscreen();
+            } else if (fullscreenContainer.msRequestFullscreen) {
+                fullscreenContainer.msRequestFullscreen();
+            }
+
+            // 隐藏滚动条
+            document.body.style.overflow = 'hidden';
         }
+
+        function exitFullscreen() {
+            // 隐藏全屏容器
+            fullscreenContainer.classList.remove('active');
+
+            // 停止全屏iframe加载（可选）
+            // fullscreenFrame.src = '';
+
+            // 退出浏览器全屏
+            if (document.fullscreenElement) {
+                document.exitFullscreen().catch(err => console.log(err));
+            } else if (document.webkitFullscreenElement) {
+                document.webkitExitFullscreen();
+            }
+
+            // 恢复滚动条
+            document.body.style.overflow = '';
+        }
+
+        // 监听ESC键退出全屏
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && fullscreenContainer.classList.contains('active')) {
+                exitFullscreen();
+            }
+        });
+
+        // 监听浏览器全屏状态变化
+        document.addEventListener('fullscreenchange', function () {
+            if (!document.fullscreenElement && fullscreenContainer.classList.contains('active')) {
+                exitFullscreen();
+            }
+        });
 
         // 初始化
         updateLanguageUI();
