@@ -4,60 +4,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>关于我们 - H5 Game Station</title>
+    <title>About - H5 Game Station</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <header>
-        <h1><a href="index.html">🎮 H5 Game Station</a></h1>
+        <h1><a href="index.html">🎮 <span id="site-title">H5 Game Station</span></a></h1>
+        <div class="header-right">
+            <div class="lang-switch">
+                <button onclick="switchLang('zh')" class="lang-btn" id="lang-zh">中文</button>
+                <button onclick="switchLang('en')" class="lang-btn" id="lang-en">EN</button>
+            </div>
+        </div>
     </header>
 
     <div class="container" style="max-width: 800px;">
         <div class="info-card">
-            <h2 style="margin-bottom: 30px; font-size: 1.8rem;">关于 H5 Game Station</h2>
+            <h2 style="margin-bottom: 30px; font-size: 1.8rem;" id="about-title">关于 H5 Game Station</h2>
 
-            <h3 style="margin: 25px 0 15px; color: var(--primary);">🎮 我们是谁</h3>
-            <p style="color: var(--text-secondary); line-height: 1.8;">
-                H5 Game Station 是一个免费的 HTML5 游戏聚合平台。我们致力于为玩家提供最好的网页游戏体验 - 无需下载，即点即玩。
+            <h3 style="margin: 25px 0 15px; color: var(--primary);" id="about-who-title">🎮 我们是谁</h3>
+            <p style="color: var(--text-secondary); line-height: 1.8;" id="about-who-desc">
+                Loading...
             </p>
 
-            <h3 style="margin: 25px 0 15px; color: var(--primary);">🎯 我们的使命</h3>
-            <p style="color: var(--text-secondary); line-height: 1.8;">
-                在这个时代，我们相信游戏应该是简单易得的。无论你是在午休时间想放松一下，还是在等待公交时打发时间，H5 Game Station 都能让你在任何设备上即时享受游戏乐趣。
+            <h3 style="margin: 25px 0 15px; color: var(--primary);" id="about-mission-title">🎯 我们的使命</h3>
+            <p style="color: var(--text-secondary); line-height: 1.8;" id="about-mission-desc">
+                Loading...
             </p>
 
-            <h3 style="margin: 25px 0 15px; color: var(--primary);">✨ 特色功能</h3>
-            <ul style="color: var(--text-secondary); margin: 15px 0 15px 20px; line-height: 2;">
-                <li><strong>免费游玩</strong> - 所有游戏完全免费</li>
-                <li><strong>无需下载</strong> - 基于 HTML5，浏览器直接运行</li>
-                <li><strong>跨平台</strong> - 电脑、手机、平板都能玩</li>
-                <li><strong>多种类型</strong> - 益智、动作、赛车、射击等丰富分类</li>
-                <li><strong>持续更新</strong> - 定期添加新游戏</li>
+            <h3 style="margin: 25px 0 15px; color: var(--primary);" id="about-feature-title">✨ 特色功能</h3>
+            <ul style="color: var(--text-secondary); margin: 15px 0 15px 20px; line-height: 2;" id="about-features">
+                <!-- Loading -->
             </ul>
 
-            <h3 style="margin: 25px 0 15px; color: var(--primary);">📧 联系我们</h3>
-            <p style="color: var(--text-secondary); line-height: 1.8;">
-                有问题、建议或合作意向？欢迎联系我们：
+            <h3 style="margin: 25px 0 15px; color: var(--primary);" id="about-contact-title">📧 联系我们</h3>
+            <p style="color: var(--text-secondary); line-height: 1.8;" id="about-contact-desc">
+                Loading...
             </p>
             <p style="color: var(--primary); margin-top: 10px;">
                 Email: contact@h5gamestation.com
             </p>
 
-            <h3 style="margin: 25px 0 15px; color: var(--primary);">⚖️ 版权声明</h3>
-            <p style="color: var(--text-secondary); line-height: 1.8;">
-                本站所有游戏版权归各自原作者所有。我们仅提供游戏链接聚合服务。如果您是游戏开发者，希望移除或添加您的游戏，请与我们联系。
+            <h3 style="margin: 25px 0 15px; color: var(--primary);" id="about-copyright-title">⚖️ 版权声明</h3>
+            <p style="color: var(--text-secondary); line-height: 1.8;" id="about-copyright-desc">
+                Loading...
             </p>
 
             <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--glass-border);">
-                <a href="index.html" style="color: var(--primary);">← 返回首页</a>
+                <a href="index.html" style="color: var(--primary);" id="back-home-link">← 返回首页</a>
             </div>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2024 H5 Game Station. 所有游戏版权归原作者所有。</p>
+        <p>&copy; 2024 H5 Game Station. <span id="footer-text">All games © their respective owners.</span></p>
     </footer>
+
+    <script src="games.js"></script>
+    <script>
+        function updateLanguageUI() {
+            // Update lang buttons
+            document.getElementById('lang-zh').classList.toggle('active', currentLang === 'zh');
+            document.getElementById('lang-en').classList.toggle('active', currentLang === 'en');
+
+            // Update common elements
+            document.getElementById('site-title').textContent = t('siteTitle');
+            document.getElementById('footer-text').textContent = t('footer');
+            document.getElementById('back-home-link').textContent = t('backHome');
+            document.title = `${t('about')} - ${t('siteTitle')}`;
+
+            // Update about content
+            document.getElementById('about-title').textContent = t('aboutTitle');
+            document.getElementById('about-who-title').textContent = t('aboutWhoTitle');
+            document.getElementById('about-who-desc').textContent = t('aboutWhoDesc');
+            document.getElementById('about-mission-title').textContent = t('aboutMissionTitle');
+            document.getElementById('about-mission-desc').textContent = t('aboutMissionDesc');
+            document.getElementById('about-feature-title').textContent = t('aboutFeatureTitle');
+            document.getElementById('about-features').innerHTML = t('aboutFeatures');
+            document.getElementById('about-contact-title').textContent = t('aboutContactTitle');
+            document.getElementById('about-contact-desc').textContent = t('aboutContactDesc');
+            document.getElementById('about-copyright-title').textContent = t('aboutCopyrightTitle');
+            document.getElementById('about-copyright-desc').textContent = t('aboutCopyrightDesc');
+        }
+
+        // Init
+        updateLanguageUI();
+    </script>
 </body>
 
 </html>

@@ -4,79 +4,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>隐私政策 - H5 Game Station</title>
+    <title>Privacy Policy - H5 Game Station</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <header>
-        <h1><a href="index.html">🎮 H5 Game Station</a></h1>
+        <h1><a href="index.html">🎮 <span id="site-title">H5 Game Station</span></a></h1>
+        <div class="header-right">
+            <div class="lang-switch">
+                <button onclick="switchLang('zh')" class="lang-btn" id="lang-zh">中文</button>
+                <button onclick="switchLang('en')" class="lang-btn" id="lang-en">EN</button>
+            </div>
+        </div>
     </header>
 
     <div class="container" style="max-width: 800px;">
         <div class="info-card">
-            <h2 style="margin-bottom: 30px; font-size: 1.8rem;">隐私政策</h2>
+            <h2 style="margin-bottom: 30px; font-size: 1.8rem;" id="privacy-title">隐私政策</h2>
 
-            <p style="color: var(--text-secondary); margin-bottom: 20px;">最后更新日期：2024年12月</p>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;" id="privacy-update">Last Updated: Dec 2024</p>
 
-            <h3 style="margin: 25px 0 15px; color: var(--primary);">1. 信息收集</h3>
-            <p style="color: var(--text-secondary); line-height: 1.8;">
-                我们的网站不会主动收集您的个人身份信息。我们可能通过以下方式收集匿名数据：
-            </p>
-            <ul style="color: var(--text-secondary); margin: 15px 0 15px 20px; line-height: 1.8;">
-                <li>网站访问统计（通过 Google Analytics 等服务）</li>
-                <li>浏览器类型和设备信息</li>
-                <li>游戏偏好数据（存储在您的本地浏览器中）</li>
+            <h3 style="margin: 25px 0 15px; color: var(--primary);" id="privacy-info-title">1. 信息收集</h3>
+            <p style="color: var(--text-secondary); line-height: 1.8;" id="privacy-info-desc">Loading...</p>
+            <ul style="color: var(--text-secondary); margin: 15px 0 15px 20px; line-height: 1.8;" id="privacy-info-list">
+                <!-- Loading -->
             </ul>
 
-            <h3 style="margin: 25px 0 15px; color: var(--primary);">2. Cookie 使用</h3>
-            <p style="color: var(--text-secondary); line-height: 1.8;">
-                本网站使用 Cookie 来改善您的浏览体验。这些 Cookie 用于：
-            </p>
-            <ul style="color: var(--text-secondary); margin: 15px 0 15px 20px; line-height: 1.8;">
-                <li>记住您的游戏进度和偏好设置</li>
-                <li>提供相关广告（通过 Google AdSense）</li>
-                <li>分析网站流量和使用模式</li>
+            <h3 style="margin: 25px 0 15px; color: var(--primary);" id="privacy-cookie-title">2. Cookie 使用</h3>
+            <p style="color: var(--text-secondary); line-height: 1.8;" id="privacy-cookie-desc">Loading...</p>
+            <ul style="color: var(--text-secondary); margin: 15px 0 15px 20px; line-height: 1.8;" id="privacy-cookie-list">
+                <!-- Loading -->
             </ul>
 
-            <h3 style="margin: 25px 0 15px; color: var(--primary);">3. 第三方服务</h3>
-            <p style="color: var(--text-secondary); line-height: 1.8;">
-                我们的网站嵌入了来自第三方的 HTML5 游戏。这些游戏可能有其自己的隐私政策。我们建议您查阅各游戏提供商的隐私条款。
-            </p>
-            <p style="color: var(--text-secondary); line-height: 1.8; margin-top: 10px;">
-                我们使用 Google AdSense 展示广告。Google 可能会使用 Cookie 来提供基于您兴趣的广告。您可以通过访问
-                <a href="https://www.google.com/settings/ads" target="_blank" style="color: var(--primary);">Google
-                    广告设置</a>
-                来管理您的广告偏好。
-            </p>
+            <h3 style="margin: 25px 0 15px; color: var(--primary);" id="privacy-third-title">3. 第三方服务</h3>
+            <p style="color: var(--text-secondary); line-height: 1.8;" id="privacy-third-desc">Loading...</p>
+            <p style="color: var(--text-secondary); line-height: 1.8; margin-top: 10px;" id="privacy-ad-desc">Loading...</p>
 
-            <h3 style="margin: 25px 0 15px; color: var(--primary);">4. 数据存储</h3>
-            <p style="color: var(--text-secondary); line-height: 1.8;">
-                您的游戏分数和偏好设置存储在您的本地浏览器 (LocalStorage) 中，我们不会将这些数据上传到我们的服务器。
-            </p>
+            <h3 style="margin: 25px 0 15px; color: var(--primary);" id="privacy-data-title">4. 数据存储</h3>
+            <p style="color: var(--text-secondary); line-height: 1.8;" id="privacy-data-desc">Loading...</p>
 
-            <h3 style="margin: 25px 0 15px; color: var(--primary);">5. 儿童隐私</h3>
-            <p style="color: var(--text-secondary); line-height: 1.8;">
-                本网站不会故意收集 13 岁以下儿童的个人信息。如果您是家长或监护人，发现您的孩子向我们提供了个人信息，请与我们联系。
-            </p>
+            <h3 style="margin: 25px 0 15px; color: var(--primary);" id="privacy-kids-title">5. 儿童隐私</h3>
+            <p style="color: var(--text-secondary); line-height: 1.8;" id="privacy-kids-desc">Loading...</p>
 
-            <h3 style="margin: 25px 0 15px; color: var(--primary);">6. 联系我们</h3>
-            <p style="color: var(--text-secondary); line-height: 1.8;">
-                如果您对本隐私政策有任何疑问，请通过以下方式联系我们：
-            </p>
+            <h3 style="margin: 25px 0 15px; color: var(--primary);" id="privacy-contact-title">6. 联系我们</h3>
+            <p style="color: var(--text-secondary); line-height: 1.8;" id="privacy-contact-desc">Loading...</p>
             <p style="color: var(--primary); margin-top: 10px;">
                 Email: contact@h5gamestation.com
             </p>
 
             <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--glass-border);">
-                <a href="index.html" style="color: var(--primary);">← 返回首页</a>
+                <a href="index.html" style="color: var(--primary);" id="back-home-link">← 返回首页</a>
             </div>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2024 H5 Game Station. 所有游戏版权归原作者所有。</p>
+        <p>&copy; 2024 H5 Game Station. <span id="footer-text">All games © their respective owners.</span></p>
     </footer>
+
+    <script src="games.js"></script>
+    <script>
+        function updateLanguageUI() {
+            // Update lang buttons
+            document.getElementById('lang-zh').classList.toggle('active', currentLang === 'zh');
+            document.getElementById('lang-en').classList.toggle('active', currentLang === 'en');
+
+            // Common
+            document.getElementById('site-title').textContent = t('siteTitle');
+            document.getElementById('footer-text').textContent = t('footer');
+            document.getElementById('back-home-link').textContent = t('backHome');
+            document.title = `${t('privacy')} - ${t('siteTitle')}`;
+
+            // Content
+            document.getElementById('privacy-title').textContent = t('privacyTitle');
+            document.getElementById('privacy-update').textContent = t('privacyUpdate');
+            
+            document.getElementById('privacy-info-title').textContent = t('privacyInfoTitle');
+            document.getElementById('privacy-info-desc').textContent = t('privacyInfoDesc');
+            document.getElementById('privacy-info-list').innerHTML = t('privacyInfoList');
+
+            document.getElementById('privacy-cookie-title').textContent = t('privacyCookieTitle');
+            document.getElementById('privacy-cookie-desc').textContent = t('privacyCookieDesc');
+            document.getElementById('privacy-cookie-list').innerHTML = t('privacyCookieList');
+
+            document.getElementById('privacy-third-title').textContent = t('privacyThirdTitle');
+            document.getElementById('privacy-third-desc').textContent = t('privacyThirdDesc');
+            document.getElementById('privacy-ad-desc').innerHTML = t('privacyAdDesc');
+
+            document.getElementById('privacy-data-title').textContent = t('privacyDataTitle');
+            document.getElementById('privacy-data-desc').textContent = t('privacyDataDesc');
+
+            document.getElementById('privacy-kids-title').textContent = t('privacyKidsTitle');
+            document.getElementById('privacy-kids-desc').textContent = t('privacyKidsDesc');
+
+            document.getElementById('privacy-contact-title').textContent = t('privacyContactTitle');
+            document.getElementById('privacy-contact-desc').textContent = t('privacyContactDesc');
+        }
+
+        // Init
+        updateLanguageUI();
+    </script>
 </body>
 
 </html>

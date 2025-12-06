@@ -19,6 +19,7 @@ const i18n = {
         hypercasual: '超休闲',
         loadMore: '加载更多',
         backToList: '← 返回列表',
+        backHome: '← 返回首页',
         fullscreen: '全屏',
         exitFullscreen: '退出全屏',
         gameInfo: '游戏信息',
@@ -33,7 +34,39 @@ const i18n = {
         privacy: '隐私政策',
         about: '关于我们',
         gameNotFound: '找不到该游戏',
-        clickToPlay: '点击开始游戏'
+        clickToPlay: '点击开始游戏',
+        
+        // About Page
+        aboutTitle: '关于 H5 Game Station',
+        aboutWhoTitle: '🎮 我们是谁',
+        aboutWhoDesc: 'H5 Game Station 是一个免费的 HTML5 游戏聚合平台。我们致力于为玩家提供最好的网页游戏体验 - 无需下载，即点即玩。',
+        aboutMissionTitle: '🎯 我们的使命',
+        aboutMissionDesc: '在这个时代，我们相信游戏应该是简单易得的。无论你是在午休时间想放松一下，还是在等待公交时打发时间，H5 Game Station 都能让你在任何设备上即时享受游戏乐趣。',
+        aboutFeatureTitle: '✨ 特色功能',
+        aboutFeatures: '<li><strong>免费游玩</strong> - 所有游戏完全免费</li><li><strong>无需下载</strong> - 基于 HTML5，浏览器直接运行</li><li><strong>跨平台</strong> - 电脑、手机、平板都能玩</li><li><strong>多种类型</strong> - 益智、动作、赛车、射击等丰富分类</li><li><strong>持续更新</strong> - 定期添加新游戏</li>',
+        aboutContactTitle: '📧 联系我们',
+        aboutContactDesc: '有问题、建议或合作意向？欢迎联系我们：',
+        aboutCopyrightTitle: '⚖️ 版权声明',
+        aboutCopyrightDesc: '本站所有游戏版权归各自原作者所有。我们仅提供游戏链接聚合服务。如果您是游戏开发者，希望移除或添加您的游戏，请与我们联系。',
+
+        // Privacy Page
+        privacyTitle: '隐私政策',
+        privacyUpdate: '最后更新日期：2024年12月',
+        privacyInfoTitle: '1. 信息收集',
+        privacyInfoDesc: '我们的网站不会主动收集您的个人身份信息。我们可能通过以下方式收集匿名数据：',
+        privacyInfoList: '<li>网站访问统计（通过 Google Analytics 等服务）</li><li>浏览器类型和设备信息</li><li>游戏偏好数据（存储在您的本地浏览器中）</li>',
+        privacyCookieTitle: '2. Cookie 使用',
+        privacyCookieDesc: '本网站使用 Cookie 来改善您的浏览体验。这些 Cookie 用于：',
+        privacyCookieList: '<li>记住您的游戏进度和偏好设置</li><li>提供相关广告（通过 Google AdSense）</li><li>分析网站流量和使用模式</li>',
+        privacyThirdTitle: '3. 第三方服务',
+        privacyThirdDesc: '我们的网站嵌入了来自第三方的 HTML5 游戏。这些游戏可能有其自己的隐私政策。我们建议您查阅各游戏提供商的隐私条款。',
+        privacyAdDesc: '我们使用 Google AdSense 展示广告。Google 可能会使用 Cookie 来提供基于您兴趣的广告。您可以通过访问 <a href="https://www.google.com/settings/ads" target="_blank" style="color: var(--primary);">Google 广告设置</a> 来管理您的广告偏好。',
+        privacyDataTitle: '4. 数据存储',
+        privacyDataDesc: '您的游戏分数和偏好设置存储在您的本地浏览器 (LocalStorage) 中，我们不会将这些数据上传到我们的服务器。',
+        privacyKidsTitle: '5. 儿童隐私',
+        privacyKidsDesc: '本网站不会故意收集 13 岁以下儿童的个人信息。如果您是家长或监护人，发现您的孩子向我们提供了个人信息，请与我们联系。',
+        privacyContactTitle: '6. 联系我们',
+        privacyContactDesc: '如果您对本隐私政策有任何疑问，请通过以下方式联系我们：'
     },
     en: {
         siteTitle: 'H5 Game Station',
@@ -52,6 +85,7 @@ const i18n = {
         hypercasual: 'Hypercasual',
         loadMore: 'Load More',
         backToList: '← Back',
+        backHome: '← Home',
         fullscreen: 'Fullscreen',
         exitFullscreen: 'Exit',
         gameInfo: 'Game Info',
@@ -66,7 +100,39 @@ const i18n = {
         privacy: 'Privacy',
         about: 'About',
         gameNotFound: 'Game not found',
-        clickToPlay: 'Click to Play'
+        clickToPlay: 'Click to Play',
+
+        // About Page
+        aboutTitle: 'About H5 Game Station',
+        aboutWhoTitle: '🎮 Who We Are',
+        aboutWhoDesc: 'H5 Game Station is a free HTML5 game aggregator platform. We are dedicated to providing players with the best web gaming experience - play instantly without download.',
+        aboutMissionTitle: '🎯 Our Mission',
+        aboutMissionDesc: 'In this era, we believe games should be easily accessible. Whether you want to relax during lunch break or kill time waiting for the bus, H5 Game Station lets you enjoy games instantly on any device.',
+        aboutFeatureTitle: '✨ Features',
+        aboutFeatures: '<li><strong>Free to Play</strong> - All games are completely free</li><li><strong>No Download</strong> - HTML5 based, runs directly in browser</li><li><strong>Cross Platform</strong> - Play on PC, mobile, and tablet</li><li><strong>Various Genres</strong> - Puzzle, Action, Racing, Shooting and more</li><li><strong>Continuous Updates</strong> - New games added regularly</li>',
+        aboutContactTitle: '📧 Contact Us',
+        aboutContactDesc: 'Questions, suggestions, or cooperation? Contact us:',
+        aboutCopyrightTitle: '⚖️ Copyright',
+        aboutCopyrightDesc: 'All games on this site are copyright of their respective owners. We only provide game link aggregation services. If you are a game developer and wish to remove or add your game, please contact us.',
+
+        // Privacy Page
+        privacyTitle: 'Privacy Policy',
+        privacyUpdate: 'Last Updated: December 2024',
+        privacyInfoTitle: '1. Information Collection',
+        privacyInfoDesc: 'Our website does not actively collect your personal identifiable information. We may collect anonymous data through:',
+        privacyInfoList: '<li>Website access statistics (via Google Analytics etc.)</li><li>Browser type and device information</li><li>Game preference data (stored in your local browser)</li>',
+        privacyCookieTitle: '2. Cookie Usage',
+        privacyCookieDesc: 'This website uses Cookies to improve your browsing experience. These Cookies are used to:',
+        privacyCookieList: '<li>Remember your game progress and preferences</li><li>Deliver relevant ads (via Google AdSense)</li><li>Analyze website traffic and usage patterns</li>',
+        privacyThirdTitle: '3. Third-Party Services',
+        privacyThirdDesc: 'Our website embeds HTML5 games from third parties. These games may have their own privacy policies. We recommend reviewing the privacy terms of each game provider.',
+        privacyAdDesc: 'We use Google AdSense to display ads. Google may use Cookies to serve ads based on your interests. You can manage your ad preferences by visiting <a href="https://www.google.com/settings/ads" target="_blank" style="color: var(--primary);">Google Ad Settings</a>.',
+        privacyDataTitle: '4. Data Storage',
+        privacyDataDesc: 'Your game scores and preferences are stored in your local browser (LocalStorage), and we do not upload this data to our servers.',
+        privacyKidsTitle: '5. Children Privacy',
+        privacyKidsDesc: 'We do not knowingly collect personal information from children under 13. If you are a parent or guardian and discover that your child has provided us with personal information, please contact us.',
+        privacyContactTitle: '6. Contact Us',
+        privacyContactDesc: 'If you have any questions about this Privacy Policy, please contact us via:'
     }
 };
 
