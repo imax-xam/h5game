@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>H5 Game Station - Free Online Games</title>
+    <meta name="description"
+        content="Free online HTML5 games. Play instantly without download. Puzzle, Action, Racing, Shooting and more!">
+    <meta name="keywords" content="H5 games, HTML5 games, free online games, browser games">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1><a href="index.html">🎮 <span id="site-title">H5 Game Station</span></a></h1>
+        <div class="header-right">
+            <span class="header-stats">
+                <span id="game-count">0</span> <span id="games-label">Free Games</span>
+            </span>
+            <div class="lang-switch">
+                <button onclick="switchLang('zh')" class="lang-btn" id="lang-zh">中文</button>
+                <button onclick="switchLang('en')" class="lang-btn" id="lang-en">EN</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 顶部广告位 -->
+    <div class="ad-space ad-banner">
+        Google Adsense 728x90 (Top)
+    </div>
+
+    <div class="container">
+        <!-- 分类筛选 -->
+        <div class="filters" id="filter-container">
+            <!-- JS 动态生成 -->
+        </div>
+
+        <!-- 游戏数量统计 -->
+        <div class="game-stats">
+            <span id="showing-label">Showing</span> <span id="showing-count">0</span>
+        </div>
+
+        <div id="game-grid" class="game-grid">
+            <!-- 游戏卡片将通过 JS 插入这里 -->
+        </div>
+
+        <!-- 加载更多按钮 -->
+        <div class="load-more-container" id="load-more-container" style="display: none;">
+            <button class="load-more-btn" onclick="loadMoreGames()" id="load-more-btn">Load More</button>
+        </div>
+    </div>
+
+    <!-- 底部广告位 -->
+    <div class="ad-space ad-banner" style="margin-top: 40px;">
+        Google Adsense 728x90 (Bottom)
+    </div>
+
+    <footer>
+        <p>&copy; 2024 H5 Game Station. <span id="footer-text">All games © their respective owners.</span></p>
+        <p><a href="privacy.html" id="privacy-link">Privacy</a> | <a href="about.html" id="about-link">About</a></p>
+    </footer>
+
+    <!-- 引入数据 -->
+    <script src="games.js"></script>
+    <script>
+        const grid = document.getElementById('game-grid');
+        const filterContainer = document.getElementById('filter-container');
+        const gameCountEl = document.getElementById('game-count');
+        const showingCountEl = document.getElementById('showing-count');
+        const loadMoreContainer = document.getElementById('load-more-container');
+
+        let currentCategory = 'all';
+        let displayedCount = 0;
+        const GAMES_PER_PAGE = 24;
+
+        // 更新语言UI
+        function updateLanguageUI() {
+            // 更新语言按钮状态
+            document.getElementById('lang-zh').classList.toggle('active', currentLang === 'zh');
+            document.getElementById('lang-en').classList.toggle('active', currentLang === 'en');
+
+            // 更新页面文字
+            document.getElementById('site-title').textContent = t('siteTitle');
+            document.getElementById('games-label').textContent = t('gamesCount');
+            document.getElementById('showing-label').textContent = t('showingGames');
+            document.getElementById('load-more-btn').textContent = t('loadMore');
+            document.getElementById('footer-text').textContent = t('footer');
+            document.getElementById('privacy-link').textContent = t('privacy');
+            document.getElementById('about-link').textContent = t('about');
+            document.title = `${t('siteTitle')} - ${t('siteSubtitle')}`;
+        }
+
+        // 初始化分类按钮
+        function initFilters() {
+            const categories = getAllCategories();
+            filterContainer.innerHTML = '';
+
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn' + (cat === 'all' ? ' active' : '');
+                btn.textContent = getCategoryName(cat);
+                btn.onclick = () => filterGames(cat, btn);
+                filterContainer.appendChild(btn);
+            });
+        }
+
+        // 渲染游戏卡片
+        function renderGames(gamesToRender, append = false) {
+            if (!append) {
+                grid.innerHTML = '';
+                displayedCount = 0;
+            }
+
+            const fragment = document.createDocumentFragment();
+
+            gamesToRender.forEach(game => {
+                const card = document.createElement('a');
+                card.href = `play.html?id=${game.id}`;
+                card.className = 'game-card';
+
+                const imgError = "this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7muLjmiI88L3RleHQ+PC9zdmc+';";
+
+                card.innerHTML = `
+                    <div class="game-thumb-container">
+                        <img src="${game.thumbnail}" alt="${getGameTitle(game)}" class="game-thumb" onerror="${imgError}" loading="lazy">
+                        <div class="game-overlay">
+                            <span class="play-icon">▶</span>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <div class="game-tags">
+                            <span class="game-tag cat-${game.category}">${getCategoryName(game.category)}</span>
+                        </div>
+                        <div class="game-title">${getGameTitle(game)}</div>
+                        <div class="game-desc">${getGameDesc(game)}</div>
+                    </div>
+                `;
+                fragment.appendChild(card);
+                displayedCount++;
+            });
+
+            grid.appendChild(fragment);
+        }
+
+        // 筛选游戏
+        function filterGames(category, btnElement) {
+            currentCategory = category;
+
+            // 更新按钮状态
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            if (btnElement) btnElement.classList.add('active');
+
+            // 获取该分类的游戏
+            const filteredGames = getGamesByCategory(category);
+            const gamesToShow = filteredGames.slice(0, GAMES_PER_PAGE);
+
+            renderGames(gamesToShow, false);
+
+            // 更新统计
+            showingCountEl.textContent = `${displayedCount} / ${filteredGames.length}`;
+
+            // 是否显示加载更多按钮
+            loadMoreContainer.style.display = filteredGames.length > GAMES_PER_PAGE ? 'block' : 'none';
+        }
+
+        // 加载更多游戏
+        function loadMoreGames() {
+            const filteredGames = getGamesByCategory(currentCategory);
+            const nextGames = filteredGames.slice(displayedCount, displayedCount + GAMES_PER_PAGE);
+
+            renderGames(nextGames, true);
+
+            showingCountEl.textContent = `${displayedCount} / ${filteredGames.length}`;
+
+            if (displayedCount >= filteredGames.length) {
+                loadMoreContainer.style.display = 'none';
+            }
+        }
+
+        // 初始化
+        function init() {
+            updateLanguageUI();
+            gameCountEl.textContent = getGameCount();
+            initFilters();
+            filterGames('all', document.querySelector('.filter-btn'));
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

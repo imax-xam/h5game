@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Playing - H5 Game Station</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1><a href="index.html">🎮 <span id="site-title">H5 Game Station</span></a></h1>
+        <div class="header-right">
+            <div class="lang-switch">
+                <button onclick="switchLang('zh')" class="lang-btn" id="lang-zh">中文</button>
+                <button onclick="switchLang('en')" class="lang-btn" id="lang-en">EN</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="game-layout">
+        <!-- 游戏主区域 -->
+        <div class="game-main">
+            <div class="game-controls">
+                <a href="index.html" class="back-btn" id="back-btn">← Back</a>
+                <div class="game-title-area">
+                    <span id="game-title-display">Loading...</span>
+                    <span id="game-controls-display"></span>
+                </div>
+                <button class="fullscreen-btn" onclick="toggleFullScreen()" id="fullscreen-btn">Fullscreen</button>
+            </div>
+
+            <!-- 点击开始游戏覆盖层 -->
+            <div id="click-to-play" class="click-to-play">
+                <div class="click-content">
+                    <div class="play-button-large">▶</div>
+                    <p id="click-text">Click to Play</p>
+                </div>
+            </div>
+
+            <iframe id="game-frame" class="game-frame" src="" allowfullscreen
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-pointer-lock"></iframe>
+        </div>
+
+        <!-- 侧边栏 -->
+        <div class="game-sidebar">
+
+            <!-- 广告位 -->
+            <div class="ad-space ad-sidebar">
+                Google Adsense 300x250
+            </div>
+
+            <!-- 游戏信息卡片 -->
+            <div class="info-card">
+                <h3 id="info-title">Game Info</h3>
+                <p id="game-desc-display" class="info-desc">Loading...</p>
+                <div class="info-row">
+                    <span class="info-label" id="category-label">Category:</span>
+                    <span id="game-category-display" class="game-tag">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label" id="controls-label">Controls:</span>
+                    <span id="game-controls-info" class="info-value">-</span>
+                </div>
+            </div>
+
+            <!-- 更多游戏推荐 -->
+            <div class="info-card">
+                <h3 id="more-games-title">More Games</h3>
+                <div id="more-games" class="more-games-grid">
+                    <!-- JS 填充 -->
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3 id="tips-title">Tips</h3>
+                <p id="tips-content" class="info-desc tips-text"></p>
+                <a id="direct-link" href="#" target="_blank" class="source-link">
+                    🔗 <span id="source-text">Play on Source</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <style>
+        .game-main {
+            position: relative;
+        }
+
+        .click-to-play {
+            position: absolute;
+            inset: 0;
+            top: 52px;
+            /* 控制栏高度 */
+            background: linear-gradient(135deg, var(--card-bg), #252540);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .click-to-play.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .click-content {
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        .play-button-large {
+            width: 100px;
+            height: 100px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 30px var(--accent-glow);
+            transition: transform 0.3s;
+        }
+
+        .click-to-play:hover .play-button-large {
+            transform: scale(1.1);
+        }
+
+        .click-content p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .game-title-area {
+            text-align: center;
+            flex: 1;
+        }
+
+        #game-title-display {
+            font-weight: bold;
+            display: block;
+        }
+
+        #game-controls-display {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .info-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .info-card h3 {
+            font-size: 1rem;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .info-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .info-value {
+            color: var(--text-primary);
+            font-size: 0.85rem;
+        }
+
+        .tips-text {
+            white-space: pre-line;
+        }
+
+        .source-link {
+            display: block;
+            margin-top: 15px;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .source-link:hover {
+            text-decoration: underline;
+        }
+
+        .more-games-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .more-game-item {
+            aspect-ratio: 4/3;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s;
+            display: block;
+        }
+
+        .more-game-item:hover {
+            transform: scale(1.05);
+        }
+
+        .more-game-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .game-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .game-sidebar {
+                order: 2;
+            }
+
+            .game-controls {
+                padding: 10px 15px;
+            }
+
+            .back-btn {
+                font-size: 0.8rem;
+            }
+
+            .fullscreen-btn {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+            }
+
+            #game-title-display {
+                font-size: 0.9rem;
+            }
+
+            .play-button-large {
+                width: 80px;
+                height: 80px;
+                font-size: 32px;
+            }
+        }
+    </style>
+
+    <script src="games.js"></script>
+    <script>
+        // 获取 URL 参数
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameId = parseInt(urlParams.get('id'));
+
+        // 查找游戏
+        const game = getGameById(gameId);
+        const frame = document.getElementById('game-frame');
+        const clickToPlay = document.getElementById('click-to-play');
+        let gameLoaded = false;
+
+        // 更新语言UI
+        function updateLanguageUI() {
+            document.getElementById('lang-zh').classList.toggle('active', currentLang === 'zh');
+            document.getElementById('lang-en').classList.toggle('active', currentLang === 'en');
+            document.getElementById('site-title').textContent = t('siteTitle');
+            document.getElementById('back-btn').textContent = t('backToList');
+            document.getElementById('fullscreen-btn').textContent = t('fullscreen');
+            document.getElementById('info-title').textContent = t('gameInfo');
+            document.getElementById('category-label').textContent = t('category') + ':';
+            document.getElementById('controls-label').textContent = t('controls') + ':';
+            document.getElementById('tips-title').textContent = t('tips');
+            document.getElementById('tips-content').textContent = t('tipContent');
+            document.getElementById('source-text').textContent = t('sourceLink');
+            document.getElementById('more-games-title').textContent = t('moreGames');
+            document.getElementById('click-text').textContent = t('clickToPlay');
+        }
+
+        // 点击开始游戏
+        function startGame() {
+            if (!gameLoaded && game) {
+                frame.src = game.url;
+                gameLoaded = true;
+            }
+            clickToPlay.classList.add('hidden');
+        }
+
+        clickToPlay.addEventListener('click', startGame);
+
+        if (game) {
+            document.title = `${getGameTitle(game)} - H5 Game Station`;
+            document.getElementById('game-title-display').textContent = getGameTitle(game);
+            document.getElementById('game-controls-display').textContent = game.controls ? `${t('controls')}: ${game.controls}` : '';
+            document.getElementById('direct-link').href = game.url;
+
+            // 填充游戏信息
+            document.getElementById('game-desc-display').textContent = getGameDesc(game);
+            document.getElementById('game-category-display').textContent = getCategoryName(game.category);
+            document.getElementById('game-category-display').className = 'game-tag cat-' + game.category;
+            document.getElementById('game-controls-info').textContent = game.controls || 'Mouse/Keyboard';
+
+            // 加载更多游戏推荐
+            loadMoreGamesRecommend();
+        } else {
+            alert(t('gameNotFound'));
+            window.location.href = "index.html";
+        }
+
+        // 加载更多游戏推荐
+        function loadMoreGamesRecommend() {
+            const container = document.getElementById('more-games');
+            let recommended = games.filter(g => g.category === game.category && g.id !== game.id).slice(0, 6);
+
+            if (recommended.length < 6) {
+                const others = games.filter(g => g.id !== game.id && !recommended.includes(g));
+                recommended = [...recommended, ...others].slice(0, 6);
+            }
+
+            container.innerHTML = recommended.map(g => `
+                <a href="play.html?id=${g.id}" class="more-game-item" title="${getGameTitle(g)}">
+                    <img src="${g.thumbnail}" alt="${getGameTitle(g)}" loading="lazy" 
+                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzMzMyIvPjwvc3ZnPg=='">
+                </a>
+            `).join('');
+        }
+
+        // 全屏功能
+        function toggleFullScreen() {
+            const elem = document.querySelector(".game-main");
+            if (!document.fullscreenElement) {
+                elem.requestFullscreen().catch(err => console.log(err));
+                document.getElementById('fullscreen-btn').textContent = t('exitFullscreen');
+            } else {
+                document.exitFullscreen();
+                document.getElementById('fullscreen-btn').textContent = t('fullscreen');
+            }
+        }
+
+        // 初始化
+        updateLanguageUI();
+    </script>
+</body>
+
+</html>
