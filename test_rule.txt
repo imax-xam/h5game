@@ -1,4 +1,3 @@
-Attempt 2 to verify Branch Protection.
-The previous attempt succeeded because the rule was for 'develop' branch.
-Now the rule should be for 'main' AND include administrators.
-This push SHOULD FAIL.
+Attempt 3: Verify Branch Protection.
+If this file is pushed successfully, the admin bypass is STILL ACTIVE.
+If the push fails with GH006, the protection is FINALLY WORKING!
