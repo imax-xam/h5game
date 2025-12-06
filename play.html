@@ -252,7 +252,7 @@
 
     <div class="game-layout">
         <!-- 游戏主区域 -->
-        <div class="game-main">
+        <div class="game-main" id="game-main">
             <div class="game-controls">
                 <a href="index.html" class="back-btn" id="back-btn">← Back</a>
                 <div class="game-title-area">
@@ -272,6 +272,9 @@
 
             <iframe id="game-frame" class="game-frame" src="" allowfullscreen
                 sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-pointer-lock"></iframe>
+            
+            <!-- 全屏退出按钮，默认隐藏 -->
+            <button class="fullscreen-exit-btn" onclick="exitFullscreen()" id="exit-btn">✕ 退出全屏</button>
         </div>
 
         <!-- 侧边栏 -->
@@ -315,13 +318,6 @@
         </div>
     </div>
 
-    <!-- 真正的全屏容器 -->
-    <div id="fullscreen-container" class="fullscreen-container">
-        <button class="fullscreen-exit-btn" onclick="exitFullscreen()" id="exit-btn">✕ 退出全屏</button>
-        <iframe id="fullscreen-frame" src="" allowfullscreen
-            sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-pointer-lock"></iframe>
-    </div>
-
     <script src="games.js"></script>
     <script>
         // 获取 URL 参数
@@ -331,8 +327,7 @@
         // 查找游戏
         const game = getGameById(gameId);
         const frame = document.getElementById('game-frame');
-        const fullscreenFrame = document.getElementById('fullscreen-frame');
-        const fullscreenContainer = document.getElementById('fullscreen-container');
+        const gameMain = document.getElementById('game-main'); // The container to fullscreen
         const clickToPlay = document.getElementById('click-to-play');
         let gameLoaded = false;
 
@@ -402,66 +397,52 @@
             `).join('');
         }
 
-        // ========== 全屏功能 ==========
+        // ========== 全屏功能 (Zero Reload) ==========
         function enterFullscreen() {
             if (!game) return;
+            if (!gameLoaded) { startGame(); }
 
-            // 确保游戏已加载
-            if (!gameLoaded) {
-                startGame();
-            }
-
-            // 设置全屏iframe的src
-            fullscreenFrame.src = game.url;
-
-            // 显示全屏容器
-            fullscreenContainer.classList.add('active');
-
-            // 尝试使用浏览器全屏API
-            if (fullscreenContainer.requestFullscreen) {
-                fullscreenContainer.requestFullscreen().catch(err => {
-                    // 如果全屏API失败，仍然显示我们的全屏覆盖层
-                    console.log('Fullscreen API not available, using overlay mode');
+            // Try Native Fullscreen on the Main Container
+            // This keeps the DOM intact, so iframe does NOT reload.
+            if (gameMain.requestFullscreen) {
+                gameMain.requestFullscreen().catch(err => {
+                    console.log('Fullscreen API failed, falling back to CSS fixed mode');
+                    gameMain.classList.add('fixed-fullscreen');
                 });
-            } else if (fullscreenContainer.webkitRequestFullscreen) {
-                fullscreenContainer.webkitRequestFullscreen();
-            } else if (fullscreenContainer.msRequestFullscreen) {
-                fullscreenContainer.msRequestFullscreen();
+            } else if (gameMain.webkitRequestFullscreen) {
+                gameMain.webkitRequestFullscreen();
+            } else {
+                // Fallback for iOS Safari (doesn't support element fullscreen well)
+                gameMain.classList.add('fixed-fullscreen');
             }
-
-            // 隐藏滚动条
-            document.body.style.overflow = 'hidden';
         }
 
         function exitFullscreen() {
-            // 隐藏全屏容器
-            fullscreenContainer.classList.remove('active');
+            // Remove fallback class
+            gameMain.classList.remove('fixed-fullscreen');
 
-            // 停止全屏iframe加载（可选）
-            // fullscreenFrame.src = '';
-
-            // 退出浏览器全屏
-            if (document.fullscreenElement) {
-                document.exitFullscreen().catch(err => console.log(err));
-            } else if (document.webkitFullscreenElement) {
-                document.webkitExitFullscreen();
+            // Exit Native Fullscreen
+            if (document.fullscreenElement || document.webkitFullscreenElement) {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(err => console.log(err));
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
             }
-
-            // 恢复滚动条
-            document.body.style.overflow = '';
         }
 
         // 监听ESC键退出全屏
         document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && fullscreenContainer.classList.contains('active')) {
+            if (e.key === 'Escape') {
                 exitFullscreen();
             }
         });
 
-        // 监听浏览器全屏状态变化
+        // 监听浏览器全屏状态变化 (更新样式/状态)
+        // Note: CSS :fullscreen pseudo-class handles most styling automatically
         document.addEventListener('fullscreenchange', function () {
-            if (!document.fullscreenElement && fullscreenContainer.classList.contains('active')) {
-                exitFullscreen();
+            if (!document.fullscreenElement) {
+                gameMain.classList.remove('fixed-fullscreen'); // Ensure fallback class is removed
             }
         });
 
