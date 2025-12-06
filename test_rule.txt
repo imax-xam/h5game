@@ -1,4 +1,0 @@
-Attempt 2 to verify Branch Protection.
-The previous attempt succeeded because the rule was for 'develop' branch.
-Now the rule should be for 'main' AND include administrators.
-This push SHOULD FAIL.
