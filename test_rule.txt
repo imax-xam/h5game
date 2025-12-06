@@ -1,3 +1,0 @@
-Attempt 3: Verify Branch Protection.
-If this file is pushed successfully, the admin bypass is STILL ACTIVE.
-If the push fails with GH006, the protection is FINALLY WORKING!
