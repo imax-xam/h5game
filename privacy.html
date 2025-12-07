@@ -2,6 +2,15 @@
 <html lang="zh-CN">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B2QM852L34"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-B2QM852L34');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - H5 Game Station</title>
@@ -47,11 +56,6 @@
             <h3 style="margin: 25px 0 15px; color: var(--primary);" id="privacy-kids-title">5. 儿童隐私</h3>
             <p style="color: var(--text-secondary); line-height: 1.8;" id="privacy-kids-desc">Loading...</p>
 
-            <h3 style="margin: 25px 0 15px; color: var(--primary);" id="privacy-contact-title">6. 联系我们</h3>
-            <p style="color: var(--text-secondary); line-height: 1.8;" id="privacy-contact-desc">Loading...</p>
-            <p style="color: var(--primary); margin-top: 10px;">
-                Email: contact@h5gamestation.com
-            </p>
 
             <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--glass-border);">
                 <a href="index.html" style="color: var(--primary);" id="back-home-link">← 返回首页</a>
@@ -97,9 +101,6 @@
 
             document.getElementById('privacy-kids-title').textContent = t('privacyKidsTitle');
             document.getElementById('privacy-kids-desc').textContent = t('privacyKidsDesc');
-
-            document.getElementById('privacy-contact-title').textContent = t('privacyContactTitle');
-            document.getElementById('privacy-contact-desc').textContent = t('privacyContactDesc');
         }
 
         // Init
