@@ -2,6 +2,15 @@
 <html lang="zh-CN">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B2QM852L34"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-B2QM852L34');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About - H5 Game Station</title>
@@ -38,13 +47,6 @@
                 <!-- Loading -->
             </ul>
 
-            <h3 style="margin: 25px 0 15px; color: var(--primary);" id="about-contact-title">📧 联系我们</h3>
-            <p style="color: var(--text-secondary); line-height: 1.8;" id="about-contact-desc">
-                Loading...
-            </p>
-            <p style="color: var(--primary); margin-top: 10px;">
-                Email: contact@h5gamestation.com
-            </p>
 
             <h3 style="margin: 25px 0 15px; color: var(--primary);" id="about-copyright-title">⚖️ 版权声明</h3>
             <p style="color: var(--text-secondary); line-height: 1.8;" id="about-copyright-desc">
@@ -82,8 +84,6 @@
             document.getElementById('about-mission-desc').textContent = t('aboutMissionDesc');
             document.getElementById('about-feature-title').textContent = t('aboutFeatureTitle');
             document.getElementById('about-features').innerHTML = t('aboutFeatures');
-            document.getElementById('about-contact-title').textContent = t('aboutContactTitle');
-            document.getElementById('about-contact-desc').textContent = t('aboutContactDesc');
             document.getElementById('about-copyright-title').textContent = t('aboutCopyrightTitle');
             document.getElementById('about-copyright-desc').textContent = t('aboutCopyrightDesc');
         }
