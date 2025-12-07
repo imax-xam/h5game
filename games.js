@@ -36,6 +36,10 @@ const i18n = {
         gameNotFound: '找不到该游戏',
         clickToPlay: '点击开始游戏',
         
+        // New Sections
+        dailyPicks: '📅 今日推荐',
+        recentlyPlayed: '🕒 最近玩过',
+        
         // About Page
         aboutTitle: '关于 H5 Game Station',
         aboutWhoTitle: '🎮 我们是谁',
@@ -101,6 +105,10 @@ const i18n = {
         about: 'About',
         gameNotFound: 'Game not found',
         clickToPlay: 'Click to Play',
+
+        // New Sections
+        dailyPicks: '📅 Daily Picks',
+        recentlyPlayed: '🕒 Recently Played',
 
         // About Page
         aboutTitle: 'About H5 Game Station',
@@ -708,27 +716,75 @@ function getGameById(id) {
 }
 
 // ========================================
+// 历史记录功能 (Recently Played)
+// ========================================
+const HISTORY_KEY = 'h5game_history';
+const MAX_HISTORY = 6; // 保留最近6个
+
+function saveToHistory(gameId) {
+    if (!gameId) return;
+    let history = getHistoryIds();
+    // 移除已存在的（为了把它移到最前面）
+    history = history.filter(id => id !== parseInt(gameId));
+    // 添加到开头
+    history.unshift(parseInt(gameId));
+    // 截断
+    if (history.length > MAX_HISTORY) {
+        history = history.slice(0, MAX_HISTORY);
+    }
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+}
+
+function getHistoryIds() {
+    const json = localStorage.getItem(HISTORY_KEY);
+    try {
+        return json ? JSON.parse(json) : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function getHistoryGames() {
+    const ids = getHistoryIds();
+    // 过滤掉可能已经下架的游戏
+    return ids.map(id => getGameById(id)).filter(game => !!game);
+}
+
+// ========================================
+// 每日推荐功能 (Daily Featured)
+// ========================================
+// 简单的基于日期的伪随机种子生成器
+function getDailySeed() {
+    const d = new Date();
+    // 种子格式: YYYYMMDD
+    return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+}
+
+// 伪随机函数
+function seededRandom(seed) {
+    var x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+}
+
+function getDailyFeaturedGames(count = 4) {
+    const seed = getDailySeed();
+    let availableGames = [...games]; // Copy array
+    const featured = [];
+    
+    // 简单的洗牌算法
+    for (let i = 0; i < count; i++) {
+        if (availableGames.length === 0) break;
+        const index = Math.floor(seededRandom(seed + i) * availableGames.length);
+        featured.push(availableGames[index]);
+        availableGames.splice(index, 1); // Remove chosen game
+    }
+    return featured;
+}
+
+// ========================================
 // 如何添加游戏 (Instructions)
 // ========================================
 /*
  * 添加新游戏很简单！只需在 games 数组中添加新对象：
- * 
- * {
- *     id: 1000,                    // 唯一ID
- *     title: "Game Name",          // 英文名
- *     titleZh: "游戏中文名",        // 中文名
- *     desc: "Description",          // 英文描述
- *     descZh: "中文描述",           // 中文描述
- *     category: "puzzle",           // 分类: puzzle/arcade/racing/shooting/adventure/casual/sports/action
- *     thumbnail: "https://...",     // 缩略图URL
- *     url: "https://...",           // 游戏iframe URL
- *     controls: "Mouse/Keyboard"    // 操作说明
- * }
- * 
- * GameMonetize 游戏格式：
- * URL: https://html5.gamemonetize.com/{gameId}/
- * Thumbnail: https://img.gamemonetize.com/{gameId}/512x384.jpg
- * 
- * 可从这里获取游戏列表：
- * https://gamemonetize.com/feed.php?format=0&category=all&num=100
+ * ...
  */

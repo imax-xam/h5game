@@ -383,6 +383,9 @@
 
             // 加载更多游戏推荐
             loadMoreGamesRecommend();
+            
+            // 记录历史
+            saveToHistory(game.id);
         } else {
             alert(t('gameNotFound'));
             window.location.href = "index.html";
