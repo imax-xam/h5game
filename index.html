@@ -72,9 +72,19 @@
     <header>
         <h1><a href="index.html">🎮 <span id="site-title">H5 Game Station</span></a></h1>
         <div class="header-right">
-            <span class="header-stats">
-                <span id="game-count">0</span> <span id="games-label">Free Games</span>
-            </span>
+            <!-- History Dropdown -->
+            <div class="history-wrapper">
+                <button class="history-btn" id="history-toggle-btn" onclick="toggleHistory()" title="Recently Played">🕒</button>
+                <div class="history-dropdown" id="history-dropdown">
+                    <div class="history-header">
+                        <span id="dropdown-title">Recently Played</span>
+                    </div>
+                    <div class="history-list" id="history-list">
+                        <!-- JS Generated -->
+                    </div>
+                </div>
+            </div>
+
             <div class="lang-switch">
                 <button onclick="switchLang('zh')" class="lang-btn" id="lang-zh">中文</button>
                 <button onclick="switchLang('en')" class="lang-btn" id="lang-en">EN</button>
@@ -94,6 +104,16 @@
         <div class="filters-wrapper">
             <div class="filters" id="filter-container">
                 <!-- JS 动态生成 -->
+            </div>
+        </div>
+
+        <!-- Daily Picks Hero Slider -->
+        <div id="daily-section" style="margin-bottom: 60px;">
+            <h3 style="color:var(--text-primary); margin-bottom:24px; font-size:1.4rem; padding-left: 4px;">
+                <span id="daily-title">Daily Picks</span>
+            </h3>
+            <div id="hero-slider" class="hero-section">
+                <!-- JS Injected -->
             </div>
         </div>
 
@@ -127,7 +147,7 @@
     <script>
         const grid = document.getElementById('game-grid');
         const filterContainer = document.getElementById('filter-container');
-        const gameCountEl = document.getElementById('game-count');
+        const gameCountEl = document.getElementById('game-count'); // 注意：header里可能已经移除了game-count元素？
         const showingCountEl = document.getElementById('showing-count');
         const loadMoreContainer = document.getElementById('load-more-container');
 
@@ -138,17 +158,19 @@
         // 更新语言UI
         function updateLanguageUI() {
             // 更新语言按钮状态
-            document.getElementById('lang-zh').classList.toggle('active', currentLang === 'zh');
-            document.getElementById('lang-en').classList.toggle('active', currentLang === 'en');
+            if(document.getElementById('lang-zh')) document.getElementById('lang-zh').classList.toggle('active', currentLang === 'zh');
+            if(document.getElementById('lang-en')) document.getElementById('lang-en').classList.toggle('active', currentLang === 'en');
 
             // 更新页面文字
-            document.getElementById('site-title').textContent = t('siteTitle');
-            document.getElementById('games-label').textContent = t('gamesCount');
-            document.getElementById('showing-label').textContent = t('showingGames');
-            document.getElementById('load-more-btn').textContent = t('loadMore');
-            document.getElementById('footer-text').textContent = t('footer');
-            document.getElementById('privacy-link').textContent = t('privacy');
-            document.getElementById('about-link').textContent = t('about');
+            if(document.getElementById('site-title')) document.getElementById('site-title').textContent = t('siteTitle');
+            if(document.getElementById('games-label')) document.getElementById('games-label').textContent = t('gamesCount');
+            if(document.getElementById('showing-label')) document.getElementById('showing-label').textContent = t('showingGames');
+            if(document.getElementById('load-more-btn')) document.getElementById('load-more-btn').textContent = t('loadMore');
+            if(document.getElementById('footer-text')) document.getElementById('footer-text').textContent = t('footer');
+            if(document.getElementById('privacy-link')) document.getElementById('privacy-link').textContent = t('privacy');
+            if(document.getElementById('about-link')) document.getElementById('about-link').textContent = t('about');
+            if(document.getElementById('daily-title')) document.getElementById('daily-title').textContent = t('dailyPicks');
+            if(document.getElementById('dropdown-title')) document.getElementById('dropdown-title').textContent = t('recentlyPlayed');
             document.title = `${t('siteTitle')} - ${t('siteSubtitle')}`;
         }
 
@@ -167,10 +189,14 @@
         }
 
         // 渲染游戏卡片
-        function renderGames(gamesToRender, append = false) {
+        function renderGames(gamesToRender, append = false, targetContainer = grid) {
+            if (!targetContainer) {
+                console.warn('Target container not found');
+                return;
+            }
             if (!append) {
-                grid.innerHTML = '';
-                displayedCount = 0;
+                targetContainer.innerHTML = '';
+                if (targetContainer === grid) displayedCount = 0;
             }
 
             const fragment = document.createDocumentFragment();
@@ -180,7 +206,7 @@
                 card.href = `play.html?id=${game.id}`;
                 card.className = 'game-card';
 
-                const imgError = "this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7muLjmiI88L3RleHQ+PC9zdmc+';";
+                const imgError = "this.onerror=null;this.parentElement.style.background='#222';this.style.display='none';";
 
                 card.innerHTML = `
                     <div class="game-thumb-container">
@@ -198,11 +224,149 @@
                     </div>
                 `;
                 fragment.appendChild(card);
-                displayedCount++;
+                if (targetContainer === grid) displayedCount++;
             });
 
-            grid.appendChild(fragment);
+            targetContainer.appendChild(fragment);
         }
+
+        // Hero Slider Logic
+        let heroInterval;
+        let currentHeroIndex = 0;
+
+        function renderHeroSlider(games) {
+            const container = document.getElementById('hero-slider');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            // Slides
+            games.forEach((game, index) => {
+                const activeClass = index === 0 ? 'active' : '';
+                const slide = document.createElement('div');
+                slide.className = `hero-slide ${activeClass}`;
+                
+                slide.innerHTML = `
+                    <div class="hero-bg" style="background-image: url('${game.thumbnail}')"></div>
+                    <div class="hero-content">
+                        <div class="hero-thumb-wrapper">
+                            <img src="${game.thumbnail}" alt="${getGameTitle(game)}" class="hero-thumb">
+                        </div>
+                        <div class="hero-info-box">
+                            <div class="hero-meta">
+                                <span class="hero-tag">${getCategoryName(game.category)}</span>
+                                <span class="hero-tag" style="background: rgba(108, 92, 231, 0.3);">Featured</span>
+                            </div>
+                            <h2 class="hero-title">${getGameTitle(game)}</h2>
+                            <p class="hero-desc">${getGameDesc(game)}</p>
+                            <a href="play.html?id=${game.id}" class="hero-btn">
+                                <span>PLAY NOW</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(slide);
+            });
+            
+            // Dots
+            const dotsContainer = document.createElement('div');
+            dotsContainer.className = 'hero-dots';
+            games.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = `hero-dot ${index === 0 ? 'active' : ''}`;
+                dot.onclick = () => switchHeroSlide(index);
+                dotsContainer.appendChild(dot);
+            });
+            container.appendChild(dotsContainer);
+            
+            // Auto Play
+            startHeroAutoPlay(games.length);
+        }
+        
+        function switchHeroSlide(index) {
+            const slides = document.querySelectorAll('.hero-slide');
+            const dots = document.querySelectorAll('.hero-dot');
+            if (slides.length === 0) return;
+            
+            if (index >= slides.length) index = 0;
+            if (index < 0) index = slides.length - 1;
+            currentHeroIndex = index;
+            
+            slides.forEach(s => s.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+            
+            if(slides[index]) slides[index].classList.add('active');
+            if(dots[index]) dots[index].classList.add('active');
+            
+            startHeroAutoPlay(slides.length);
+        }
+        
+        function startHeroAutoPlay(count) {
+            if (heroInterval) clearInterval(heroInterval);
+            heroInterval = setInterval(() => {
+                switchHeroSlide(currentHeroIndex + 1);
+            }, 5000);
+        }
+
+        // 渲染特殊板块
+        function renderSpecialSections() {
+            // Daily (Hero Slider)
+            try {
+                const dailyGames = getDailyFeaturedGames(5); 
+                renderHeroSlider(dailyGames);
+            } catch (e) {
+                console.warn('Daily section error:', e);
+            }
+            
+            // History (Dropdown)
+            try {
+                const historyGames = getHistoryGames();
+                const historyList = document.getElementById('history-list');
+                if (historyList) {
+                    renderHistoryList(historyGames, historyList);
+                }
+            } catch (e) {
+                console.warn('History section error:', e);
+            }
+        }
+
+        // 渲染历史列表
+        function renderHistoryList(games, container) {
+            if (games.length === 0) {
+                container.innerHTML = `<div class="history-empty">No games played yet</div>`;
+                return;
+            }
+            
+            const html = games.map(g => `
+                <a href="play.html?id=${g.id}" class="history-item">
+                    <img src="${g.thumbnail}" class="history-thumb" alt="${getGameTitle(g)}">
+                    <div class="history-info">
+                        <div class="history-title">${getGameTitle(g)}</div>
+                        <div class="history-cat">${getCategoryName(g.category)}</div>
+                    </div>
+                </a>
+            `).join('');
+            container.innerHTML = html;
+        }
+
+        // History Dropdown Logic
+        function toggleHistory() {
+            const dropdown = document.getElementById('history-dropdown');
+            const btn = document.getElementById('history-toggle-btn');
+            if (dropdown) dropdown.classList.toggle('show');
+            if (btn) btn.classList.toggle('active');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('history-dropdown');
+            const btn = document.getElementById('history-toggle-btn');
+            if (dropdown && btn && !dropdown.contains(e.target) && !btn.contains(e.target)) {
+                dropdown.classList.remove('show');
+                btn.classList.remove('active');
+            }
+        });
 
         // 筛选游戏
         function filterGames(category, btnElement) {
@@ -219,10 +383,10 @@
             renderGames(gamesToShow, false);
 
             // 更新统计
-            showingCountEl.textContent = `${displayedCount} / ${filteredGames.length}`;
+            if (showingCountEl) showingCountEl.textContent = `${displayedCount} / ${filteredGames.length}`;
 
             // 是否显示加载更多按钮
-            loadMoreContainer.style.display = filteredGames.length > GAMES_PER_PAGE ? 'block' : 'none';
+            if (loadMoreContainer) loadMoreContainer.style.display = filteredGames.length > GAMES_PER_PAGE ? 'block' : 'none';
         }
 
         // 加载更多游戏
@@ -232,23 +396,36 @@
 
             renderGames(nextGames, true);
 
-            showingCountEl.textContent = `${displayedCount} / ${filteredGames.length}`;
+            if (showingCountEl) showingCountEl.textContent = `${displayedCount} / ${filteredGames.length}`;
 
             if (displayedCount >= filteredGames.length) {
-                loadMoreContainer.style.display = 'none';
+                if (loadMoreContainer) loadMoreContainer.style.display = 'none';
             }
         }
 
         // 初始化
         function init() {
-            updateLanguageUI();
-            gameCountEl.textContent = getGameCount();
-            initFilters();
-            filterGames('all', document.querySelector('.filter-btn'));
+            try {
+                if (typeof games === 'undefined') {
+                    console.error('Games data not loaded');
+                    // 尝试延迟重试一次
+                    setTimeout(() => {
+                        if (typeof games !== 'undefined') init();
+                    }, 500);
+                    return;
+                }
+                updateLanguageUI();
+                if(gameCountEl) gameCountEl.textContent = getGameCount();
+                initFilters();
+                filterGames('all', document.querySelector('.filter-btn'));
+                renderSpecialSections();
+            } catch (e) {
+                console.error("Init failed:", e);
+                alert("Game loading failed: " + e.message);
+            }
         }
 
         init();
     </script>
 </body>
-
 </html>
