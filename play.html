@@ -279,7 +279,7 @@
                 </div>
             </div>
 
-            <iframe id="game-frame" class="game-frame" src="" allowfullscreen
+            <iframe id="game-frame" class="game-frame" src="" allowfullscreen scrolling="no"
                 sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-pointer-lock"></iframe>
             
             <!-- 全屏退出按钮，默认隐藏 -->
@@ -289,10 +289,12 @@
         <!-- 侧边栏 -->
         <div class="game-sidebar">
 
-            <!-- 广告位 -->
+            <!-- 广告位 (暂时隐藏) -->
+            <!--
             <div class="ad-space ad-sidebar">
                 Google Adsense 300x250
             </div>
+            -->
 
             <!-- 游戏信息卡片 -->
             <div class="info-card">
@@ -414,8 +416,6 @@
             if (!game) return;
             if (!gameLoaded) { startGame(); }
 
-            // Try Native Fullscreen on the Main Container
-            // This keeps the DOM intact, so iframe does NOT reload.
             if (gameMain.requestFullscreen) {
                 gameMain.requestFullscreen().catch(err => {
                     console.log('Fullscreen API failed, falling back to CSS fixed mode');
@@ -424,16 +424,13 @@
             } else if (gameMain.webkitRequestFullscreen) {
                 gameMain.webkitRequestFullscreen();
             } else {
-                // Fallback for iOS Safari (doesn't support element fullscreen well)
                 gameMain.classList.add('fixed-fullscreen');
             }
         }
 
         function exitFullscreen() {
-            // Remove fallback class
             gameMain.classList.remove('fixed-fullscreen');
 
-            // Exit Native Fullscreen
             if (document.fullscreenElement || document.webkitFullscreenElement) {
                 if (document.exitFullscreen) {
                     document.exitFullscreen().catch(err => console.log(err));

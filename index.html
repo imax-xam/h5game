@@ -92,23 +92,18 @@
         </div>
     </header>
 
-    <!-- 顶部广告位 -->
+    <!-- 顶部广告位 (暂时隐藏) -->
+    <!--
     <div class="container">
         <div class="ad-space ad-banner">
             Google Adsense 728x90 (Top)
         </div>
     </div>
+    -->
 
     <div class="container">
-        <!-- 分类筛选 -->
-        <div class="filters-wrapper">
-            <div class="filters" id="filter-container">
-                <!-- JS 动态生成 -->
-            </div>
-        </div>
-
         <!-- Daily Picks Hero Slider -->
-        <div id="daily-section" style="margin-bottom: 60px;">
+        <div id="daily-section" style="margin-bottom: 40px;">
             <h3 style="color:var(--text-primary); margin-bottom:24px; font-size:1.4rem; padding-left: 4px;">
                 <span id="daily-title">Daily Picks</span>
             </h3>
@@ -117,9 +112,56 @@
             </div>
         </div>
 
+        <!-- 热门游戏专区 -->
+        <div id="hot-section" class="hot-section">
+            <div class="hot-header">
+                <h3><span id="hot-title">🔥 Hot Games</span></h3>
+                <div class="hot-nav">
+                    <button class="hot-nav-btn" onclick="scrollHotGames(-1)" aria-label="Scroll left">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                    </button>
+                    <button class="hot-nav-btn" onclick="scrollHotGames(1)" aria-label="Scroll right">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="hot-scroll-container" id="hot-scroll-container">
+                <div id="hot-games-grid" class="hot-games-grid">
+                    <!-- JS Injected -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 搜索框 -->
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" id="search-input" class="search-input" placeholder="Search games..." autocomplete="off">
+                <button class="search-btn" onclick="performSearch()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
+                <button class="search-clear" id="search-clear" onclick="clearSearch()" style="display: none;">✕</button>
+            </div>
+            <div id="search-suggestions" class="search-suggestions"></div>
+        </div>
+
+        <!-- 分类筛选 -->
+        <div class="filters-wrapper">
+            <div class="filters" id="filter-container">
+                <!-- JS 动态生成 -->
+            </div>
+        </div>
+
         <!-- 游戏数量统计 -->
         <div class="game-stats">
             <span id="showing-label">Showing</span> <span id="showing-count">0</span>
+            <span id="search-result-text" style="display: none;"></span>
         </div>
 
         <div id="game-grid" class="game-grid">
@@ -132,13 +174,15 @@
         </div>
     </div>
 
-    <!-- 底部广告位 -->
+    <!-- 底部广告位 (暂时隐藏) -->
+    <!--
     <div class="ad-space ad-banner" style="margin-top: 40px;">
         Google Adsense 728x90 (Bottom)
     </div>
+    -->
 
     <footer>
-        <p>&copy; 2024 H5 Game Station. <span id="footer-text">All games © their respective owners.</span></p>
+        <p>&copy; 2025 H5 Game Station. <span id="footer-text">All games © their respective owners.</span></p>
         <p><a href="privacy.html" id="privacy-link">Privacy</a> | <a href="about.html" id="about-link">About</a></p>
     </footer>
 
@@ -170,7 +214,9 @@
             if(document.getElementById('privacy-link')) document.getElementById('privacy-link').textContent = t('privacy');
             if(document.getElementById('about-link')) document.getElementById('about-link').textContent = t('about');
             if(document.getElementById('daily-title')) document.getElementById('daily-title').textContent = t('dailyPicks');
+            if(document.getElementById('hot-title')) document.getElementById('hot-title').textContent = t('hotGames');
             if(document.getElementById('dropdown-title')) document.getElementById('dropdown-title').textContent = t('recentlyPlayed');
+            if(document.getElementById('search-input')) document.getElementById('search-input').placeholder = t('searchPlaceholder');
             document.title = `${t('siteTitle')} - ${t('siteSubtitle')}`;
         }
 
@@ -319,6 +365,17 @@
                 console.warn('Daily section error:', e);
             }
             
+            // Hot Games Section
+            try {
+                const hotGames = getHotGames(16);
+                const hotGrid = document.getElementById('hot-games-grid');
+                if (hotGrid && hotGames.length > 0) {
+                    renderHotGamesCards(hotGames, hotGrid);
+                }
+            } catch (e) {
+                console.warn('Hot games section error:', e);
+            }
+            
             // History (Dropdown)
             try {
                 const historyGames = getHistoryGames();
@@ -329,6 +386,23 @@
             } catch (e) {
                 console.warn('History section error:', e);
             }
+        }
+
+        // 渲染热门游戏卡片（紧凑样式，两行横向滚动）
+        function renderHotGamesCards(games, container) {
+            const html = games.map(g => `
+                <a href="play.html?id=${g.id}" class="game-card hot-card">
+                    <div class="hot-thumb">
+                        <img src="${g.thumbnail}" alt="${getGameTitle(g)}" loading="lazy" 
+                             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%231a1a2e%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%236c5ce7%22 font-size=%2240%22>🎮</text></svg>'">
+                    </div>
+                    <div class="game-info">
+                        <h3 class="game-title">${getGameTitle(g)}</h3>
+                        <span class="game-cat">${getCategoryName(g.category)}</span>
+                    </div>
+                </a>
+            `).join('');
+            container.innerHTML = html;
         }
 
         // 渲染历史列表
@@ -391,7 +465,7 @@
 
         // 加载更多游戏
         function loadMoreGames() {
-            const filteredGames = getGamesByCategory(currentCategory);
+            const filteredGames = currentSearchResults || getGamesByCategory(currentCategory);
             const nextGames = filteredGames.slice(displayedCount, displayedCount + GAMES_PER_PAGE);
 
             renderGames(nextGames, true);
@@ -401,6 +475,340 @@
             if (displayedCount >= filteredGames.length) {
                 if (loadMoreContainer) loadMoreContainer.style.display = 'none';
             }
+        }
+
+        // ========================================
+        // 搜索功能
+        // ========================================
+        const searchInput = document.getElementById('search-input');
+        const searchSuggestions = document.getElementById('search-suggestions');
+        const searchClear = document.getElementById('search-clear');
+        const searchResultText = document.getElementById('search-result-text');
+        let currentSearchResults = null;
+        let searchTimeout = null;
+
+        // 模糊匹配函数
+        function fuzzyMatch(str, pattern) {
+            str = str.toLowerCase();
+            pattern = pattern.toLowerCase();
+            
+            // 完全包含
+            if (str.includes(pattern)) return { match: true, score: 100 };
+            
+            // 拼音首字母或单词首字母匹配
+            const words = str.split(/\s+/);
+            const initials = words.map(w => w[0]).join('');
+            if (initials.includes(pattern)) return { match: true, score: 80 };
+            
+            // 模糊匹配 - 字符顺序匹配
+            let patternIdx = 0;
+            let score = 0;
+            for (let i = 0; i < str.length && patternIdx < pattern.length; i++) {
+                if (str[i] === pattern[patternIdx]) {
+                    score += 10;
+                    patternIdx++;
+                }
+            }
+            if (patternIdx === pattern.length) {
+                return { match: true, score: score };
+            }
+            
+            // Levenshtein 距离 - 允许少量错误
+            const distance = levenshteinDistance(str, pattern);
+            const maxLen = Math.max(str.length, pattern.length);
+            const similarity = 1 - distance / maxLen;
+            if (similarity > 0.5) {
+                return { match: true, score: similarity * 50 };
+            }
+            
+            return { match: false, score: 0 };
+        }
+
+        // Levenshtein 距离算法
+        function levenshteinDistance(a, b) {
+            const matrix = [];
+            for (let i = 0; i <= b.length; i++) {
+                matrix[i] = [i];
+            }
+            for (let j = 0; j <= a.length; j++) {
+                matrix[0][j] = j;
+            }
+            for (let i = 1; i <= b.length; i++) {
+                for (let j = 1; j <= a.length; j++) {
+                    if (b[i-1] === a[j-1]) {
+                        matrix[i][j] = matrix[i-1][j-1];
+                    } else {
+                        matrix[i][j] = Math.min(
+                            matrix[i-1][j-1] + 1,
+                            matrix[i][j-1] + 1,
+                            matrix[i-1][j] + 1
+                        );
+                    }
+                }
+            }
+            return matrix[b.length][a.length];
+        }
+
+        // 搜索游戏
+        function searchGames(query) {
+            if (!query || query.length < 1) return [];
+            
+            const results = [];
+            const queryLower = query.toLowerCase();
+            
+            games.forEach(game => {
+                const title = getGameTitle(game).toLowerCase();
+                const titleEn = game.title.toLowerCase();
+                const desc = getGameDesc(game).toLowerCase();
+                const category = game.category.toLowerCase();
+                
+                // 多字段匹配
+                let bestScore = 0;
+                
+                // 标题匹配权重最高
+                const titleMatch = fuzzyMatch(title, queryLower);
+                if (titleMatch.match) bestScore = Math.max(bestScore, titleMatch.score * 2);
+                
+                const titleEnMatch = fuzzyMatch(titleEn, queryLower);
+                if (titleEnMatch.match) bestScore = Math.max(bestScore, titleEnMatch.score * 2);
+                
+                // 描述匹配
+                const descMatch = fuzzyMatch(desc, queryLower);
+                if (descMatch.match) bestScore = Math.max(bestScore, descMatch.score * 0.5);
+                
+                // 分类匹配
+                if (category.includes(queryLower)) bestScore = Math.max(bestScore, 60);
+                
+                if (bestScore > 0) {
+                    results.push({ game, score: bestScore });
+                }
+            });
+            
+            // 按分数排序
+            results.sort((a, b) => b.score - a.score);
+            return results.map(r => r.game);
+        }
+
+        // 获取相似关键词建议
+        function getSimilarKeywords(query) {
+            const keywords = new Set();
+            const queryLower = query.toLowerCase();
+            
+            games.forEach(game => {
+                const title = getGameTitle(game);
+                const words = title.split(/\s+/);
+                words.forEach(word => {
+                    if (word.length > 2) {
+                        const dist = levenshteinDistance(word.toLowerCase(), queryLower);
+                        if (dist <= 2 && dist > 0) {
+                            keywords.add(word);
+                        }
+                    }
+                });
+            });
+            
+            // 添加分类建议
+            const categories = ['puzzle', 'arcade', 'racing', 'shooting', 'action', 'casual', 'sports', 'adventure'];
+            categories.forEach(cat => {
+                if (cat.includes(queryLower) || levenshteinDistance(cat, queryLower) <= 2) {
+                    keywords.add(getCategoryName(cat));
+                }
+            });
+            
+            return Array.from(keywords).slice(0, 5);
+        }
+
+        // 显示搜索建议
+        function showSuggestions(query) {
+            if (!query || query.length < 1) {
+                searchSuggestions.classList.remove('active');
+                return;
+            }
+            
+            const results = searchGames(query).slice(0, 8);
+            
+            if (results.length > 0) {
+                const html = results.map(game => `
+                    <a href="play.html?id=${game.id}" class="suggestion-item">
+                        <img src="${game.thumbnail}" class="suggestion-thumb" alt="" onerror="this.style.display='none'">
+                        <div class="suggestion-info">
+                            <div class="suggestion-title">${highlightMatch(getGameTitle(game), query)}</div>
+                            <div class="suggestion-category">${getCategoryName(game.category)}</div>
+                        </div>
+                    </a>
+                `).join('');
+                searchSuggestions.innerHTML = html;
+            } else {
+                // 没有结果，显示相似建议
+                const similar = getSimilarKeywords(query);
+                let html = `<div class="search-no-result">
+                    <div>😕 ${currentLang === 'zh' ? '未找到' : 'No results for'} "${query}"</div>`;
+                
+                if (similar.length > 0) {
+                    html += `<div class="similar-title">${currentLang === 'zh' ? '试试这些：' : 'Try these:'}</div>
+                        <div>${similar.map(k => `<span class="search-tag" onclick="searchFor('${k}')">${k}</span>`).join('')}</div>`;
+                }
+                html += '</div>';
+                searchSuggestions.innerHTML = html;
+            }
+            
+            searchSuggestions.classList.add('active');
+        }
+
+        // 高亮匹配文字
+        function highlightMatch(text, query) {
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<span class="suggestion-highlight">$1</span>');
+        }
+
+        // 执行搜索
+        function performSearch() {
+            const query = searchInput.value.trim();
+            if (!query) {
+                clearSearch();
+                return;
+            }
+            
+            searchSuggestions.classList.remove('active');
+            currentSearchResults = searchGames(query);
+            
+            // 显示搜索结果
+            const gamesToShow = currentSearchResults.slice(0, GAMES_PER_PAGE);
+            renderGames(gamesToShow, false);
+            
+            // 更新统计
+            if (showingCountEl) {
+                showingCountEl.textContent = `${displayedCount} / ${currentSearchResults.length}`;
+            }
+            if (searchResultText) {
+                searchResultText.style.display = 'inline';
+                searchResultText.textContent = currentLang === 'zh' 
+                    ? `- 搜索 "${query}"` 
+                    : `- Search "${query}"`;
+            }
+            
+            // 显示/隐藏加载更多
+            if (loadMoreContainer) {
+                loadMoreContainer.style.display = currentSearchResults.length > GAMES_PER_PAGE ? 'block' : 'none';
+            }
+            
+            // 重置分类按钮状态
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            
+            searchClear.style.display = 'block';
+        }
+
+        // 清除搜索
+        function clearSearch() {
+            searchInput.value = '';
+            searchSuggestions.classList.remove('active');
+            searchClear.style.display = 'none';
+            currentSearchResults = null;
+            
+            if (searchResultText) {
+                searchResultText.style.display = 'none';
+            }
+            
+            // 恢复默认显示
+            filterGames('all', document.querySelector('.filter-btn'));
+        }
+
+        // 点击建议标签搜索
+        function searchFor(keyword) {
+            searchInput.value = keyword;
+            performSearch();
+        }
+
+        // 初始化搜索事件
+        function initSearch() {
+            if (!searchInput) return;
+            
+            // 输入时显示建议
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.trim();
+                searchClear.style.display = query ? 'block' : 'none';
+                
+                // 防抖
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    showSuggestions(query);
+                }, 150);
+            });
+            
+            // 回车搜索
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                } else if (e.key === 'Escape') {
+                    searchSuggestions.classList.remove('active');
+                }
+            });
+            
+            // 点击外部关闭建议
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.search-section')) {
+                    searchSuggestions.classList.remove('active');
+                }
+            });
+            
+            // 聚焦时如果有内容则显示建议
+            searchInput.addEventListener('focus', () => {
+                if (searchInput.value.trim()) {
+                    showSuggestions(searchInput.value.trim());
+                }
+            });
+        }
+
+        // 热门游戏滚动功能
+        function scrollHotGames(direction) {
+            const container = document.getElementById('hot-scroll-container');
+            if (!container) return;
+            const scrollAmount = 340; // 两个卡片宽度
+            container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+        }
+
+        // 初始化热门游戏拖拽滚动
+        function initHotGamesDrag() {
+            const container = document.getElementById('hot-scroll-container');
+            if (!container) return;
+
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            container.addEventListener('mousedown', (e) => {
+                isDown = true;
+                container.classList.add('dragging');
+                startX = e.pageX - container.offsetLeft;
+                scrollLeft = container.scrollLeft;
+            });
+
+            container.addEventListener('mouseleave', () => {
+                isDown = false;
+                container.classList.remove('dragging');
+            });
+
+            container.addEventListener('mouseup', () => {
+                isDown = false;
+                container.classList.remove('dragging');
+            });
+
+            container.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - container.offsetLeft;
+                const walk = (x - startX) * 1.5;
+                container.scrollLeft = scrollLeft - walk;
+            });
+
+            // 监听滚动更新渐变遮罩
+            container.addEventListener('scroll', () => {
+                if (container.scrollLeft > 10) {
+                    container.classList.add('scrolled');
+                } else {
+                    container.classList.remove('scrolled');
+                }
+            });
         }
 
         // 初始化
@@ -417,8 +825,10 @@
                 updateLanguageUI();
                 if(gameCountEl) gameCountEl.textContent = getGameCount();
                 initFilters();
+                initSearch();
                 filterGames('all', document.querySelector('.filter-btn'));
                 renderSpecialSections();
+                initHotGamesDrag();
             } catch (e) {
                 console.error("Init failed:", e);
                 alert("Game loading failed: " + e.message);
