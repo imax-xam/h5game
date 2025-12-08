@@ -220,6 +220,186 @@ header h1 a {
     font-weight: 700;
 }
 
+/* === Search Section === */
+.search-section {
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.search-container {
+    position: relative;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.search-input {
+    width: 100%;
+    padding: 16px 50px 16px 20px;
+    background: var(--card-bg);
+    border: 2px solid var(--glass-border);
+    border-radius: var(--radius-full);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s;
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: var(--text-muted);
+}
+
+.search-input:focus {
+    border-color: var(--primary);
+    box-shadow: var(--glow-primary);
+    background: rgba(30, 30, 45, 0.9);
+}
+
+.search-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--primary);
+    border: none;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.search-btn:hover {
+    background: #5f4dd1;
+    transform: translateY(-50%) scale(1.05);
+}
+
+.search-clear {
+    position: absolute;
+    right: 55px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: color 0.2s;
+}
+
+.search-clear:hover {
+    color: var(--text-primary);
+}
+
+.search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 500px;
+    background: rgba(20, 20, 35, 0.98);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    margin-top: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+    box-shadow: var(--shadow-lg);
+}
+
+.search-suggestions.active {
+    display: block;
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+    color: inherit;
+}
+
+.suggestion-item:hover {
+    background: rgba(108, 92, 231, 0.2);
+}
+
+.suggestion-thumb {
+    width: 50px;
+    height: 38px;
+    border-radius: 6px;
+    object-fit: cover;
+    background: var(--bg-dark);
+}
+
+.suggestion-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.suggestion-title {
+    color: var(--text-primary);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.suggestion-category {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.suggestion-highlight {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.search-no-result {
+    padding: 20px;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.search-no-result .similar-title {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 10px;
+    margin-bottom: 8px;
+}
+
+.search-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    margin: 4px;
+    background: rgba(108, 92, 231, 0.2);
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    color: var(--primary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.search-tag:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* 搜索结果高亮状态 */
+#search-result-text {
+    margin-left: 10px;
+    color: var(--primary);
+}
+
 /* === Game Stats === */
 .game-stats {
     color: var(--text-secondary);
@@ -374,6 +554,191 @@ header h1 a {
     margin-bottom: 8px;
 }
 
+/* === Hot Games Section === */
+.hot-section {
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.hot-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 0 4px;
+}
+
+.hot-header h3 {
+    font-size: 1.4rem;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.hot-nav {
+    display: flex;
+    gap: 8px;
+}
+
+.hot-nav-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.hot-nav-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    transform: scale(1.1);
+    box-shadow: var(--glow-primary);
+}
+
+.hot-nav-btn:active {
+    transform: scale(0.95);
+}
+
+.hot-scroll-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    padding: 10px 0 20px;
+    margin: -10px 0;
+    cursor: grab;
+}
+
+.hot-scroll-container::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.hot-scroll-container:active {
+    cursor: grabbing;
+}
+
+.hot-games-grid {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    height: 370px; /* 两行卡片的高度 */
+    gap: 16px;
+    padding: 4px;
+    width: max-content;
+}
+
+.hot-games-grid .game-card {
+    width: 160px;
+    height: 170px; /* 固定高度确保两行 */
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.hot-games-grid .game-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 15px 30px rgba(255, 100, 50, 0.2);
+}
+
+/* 热门游戏图片容器 - 独立样式 */
+.hot-thumb {
+    width: 100%;
+    height: 105px;
+    overflow: hidden;
+    background: #1a1a2e;
+}
+
+.hot-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    transition: transform 0.4s ease;
+}
+
+.hot-card:hover .hot-thumb img {
+    transform: scale(1.1);
+}
+
+.hot-games-grid .game-info {
+    padding: 10px 12px;
+}
+
+.hot-games-grid .game-title {
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+}
+
+.hot-games-grid .game-desc {
+    display: none; /* 隐藏描述，保持卡片紧凑 */
+}
+
+.hot-games-grid .game-cat {
+    font-size: 0.7rem;
+}
+
+/* 热门游戏移动端适配 */
+@media (max-width: 768px) {
+    .hot-games-grid {
+        height: 320px;
+        gap: 12px;
+    }
+    
+    .hot-games-grid .game-card {
+        width: 135px;
+        height: 148px;
+    }
+    
+    .hot-thumb {
+        height: 90px;
+    }
+    
+    .hot-games-grid .game-info {
+        padding: 8px 10px;
+    }
+    
+    .hot-nav-btn {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+/* 滚动渐变遮罩效果 */
+.hot-scroll-container::before,
+.hot-scroll-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.hot-scroll-container::before {
+    left: 0;
+    background: linear-gradient(to right, var(--bg-dark) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.hot-scroll-container::after {
+    right: 0;
+    background: linear-gradient(to left, var(--bg-dark) 0%, transparent 100%);
+}
+
+.hot-scroll-container.scrolled::before {
+    opacity: 1;
+}
+
 /* === Load More === */
 .load-more-container {
     text-align: center;
@@ -455,7 +820,7 @@ footer a:hover {
     display: grid;
     grid-template-columns: 1fr 340px;
     gap: 30px;
-    padding: 30px 0;
+    padding: 30px 24px;
     max-width: 1440px;
     margin: 0 auto;
 }
@@ -532,7 +897,9 @@ footer a:hover {
 
 .game-frame {
     width: 100%;
-    aspect-ratio: 16/9;
+    height: calc(100vh - 180px); /* 视窗高度减去header和控制栏 */
+    min-height: 400px;
+    max-height: 800px;
     background: #000;
     border: none;
     display: block;
@@ -1381,4 +1748,108 @@ footer a:hover {
     .carousel-btn {
         display: none;
     }
+}
+
+/* === Fullscreen Mode (Mobile Landscape) === */
+.game-main.fixed-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 99999 !important;
+    background: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+}
+
+.game-main.fixed-fullscreen .game-controls {
+    display: none !important;
+}
+
+.game-main.fixed-fullscreen .click-to-play {
+    top: 0 !important;
+}
+
+.game-main.fixed-fullscreen .game-frame {
+    width: 100% !important;
+    height: 100% !important;
+    aspect-ratio: unset !important;
+}
+
+.game-main.fixed-fullscreen .fullscreen-exit-btn {
+    display: block !important;
+    position: fixed !important;
+    top: 15px !important;
+    right: 15px !important;
+    z-index: 100000 !important;
+}
+
+/* 竖屏时旋转游戏为横屏 */
+.game-main.rotate-landscape {
+    transform: rotate(90deg) !important;
+    transform-origin: center center !important;
+    width: 100vh !important;
+    height: 100vw !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    margin-top: -50vw !important;
+    margin-left: -50vh !important;
+}
+
+.game-main.rotate-landscape .fullscreen-exit-btn {
+    transform: rotate(-90deg) !important;
+    top: auto !important;
+    bottom: 15px !important;
+    right: auto !important;
+    left: 15px !important;
+}
+
+/* Native fullscreen styles */
+.game-main:fullscreen {
+    width: 100% !important;
+    height: 100% !important;
+    background: #000 !important;
+}
+
+.game-main:fullscreen .game-controls {
+    display: none !important;
+}
+
+.game-main:fullscreen .game-frame {
+    width: 100% !important;
+    height: 100% !important;
+    aspect-ratio: unset !important;
+}
+
+.game-main:fullscreen .fullscreen-exit-btn {
+    display: block !important;
+}
+
+.game-main:fullscreen .click-to-play {
+    top: 0 !important;
+}
+
+/* Webkit fullscreen */
+.game-main:-webkit-full-screen {
+    width: 100% !important;
+    height: 100% !important;
+    background: #000 !important;
+}
+
+.game-main:-webkit-full-screen .game-controls {
+    display: none !important;
+}
+
+.game-main:-webkit-full-screen .game-frame {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.game-main:-webkit-full-screen .fullscreen-exit-btn {
+    display: block !important;
 }
