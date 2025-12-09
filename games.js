@@ -41,6 +41,7 @@ const i18n = {
         dailyPicks: '📅 今日推荐',
         hotGames: '🔥 热门游戏',
         recentlyPlayed: '🕒 最近玩过',
+        walkthrough: '🎬 游戏攻略',
         
         // Search
         searchPlaceholder: '搜索游戏...',
@@ -118,6 +119,7 @@ const i18n = {
         dailyPicks: '📅 Daily Picks',
         hotGames: '🔥 Hot Games',
         recentlyPlayed: '🕒 Recently Played',
+        walkthrough: '🎬 Walkthrough',
         
         // Search
         searchPlaceholder: 'Search games...',
