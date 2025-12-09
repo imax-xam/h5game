@@ -14,6 +14,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Playing - H5 Game Station</title>
+    <!-- jQuery for GameMonetize Walkthroughs -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <style>
         .game-main {
@@ -280,7 +282,8 @@
             </div>
 
             <iframe id="game-frame" class="game-frame" src="" allowfullscreen scrolling="no"
-                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-pointer-lock"></iframe>
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-pointer-lock allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
+                referrerpolicy="origin"></iframe>
             
             <!-- 全屏退出按钮，默认隐藏 -->
             <button class="fullscreen-exit-btn" onclick="exitFullscreen()" id="exit-btn">✕ 退出全屏</button>
@@ -310,6 +313,12 @@
                 </div>
             </div>
 
+            <!-- 游戏攻略视频 Walkthroughs -->
+            <div class="info-card" id="walkthrough-card">
+                <h3 id="walkthrough-title">🎬 Game Walkthrough</h3>
+                <div id="gamemonetize-video"></div>
+            </div>
+
             <!-- 更多游戏推荐 -->
             <div class="info-card">
                 <h3 id="more-games-title">More Games</h3>
@@ -333,10 +342,10 @@
     <script>
         // 获取 URL 参数
         const urlParams = new URLSearchParams(window.location.search);
-        const gameId = parseInt(urlParams.get('id'));
+        const currentGameId = parseInt(urlParams.get('id'));
 
         // 查找游戏
-        const game = getGameById(gameId);
+        const game = getGameById(currentGameId);
         const frame = document.getElementById('game-frame');
         const gameMain = document.getElementById('game-main'); // The container to fullscreen
         const clickToPlay = document.getElementById('click-to-play');
@@ -358,6 +367,9 @@
             document.getElementById('more-games-title').textContent = t('moreGames');
             document.getElementById('click-text').textContent = t('clickToPlay');
             document.getElementById('exit-btn').textContent = '✕ ' + t('exitFullscreen');
+            if (document.getElementById('walkthrough-title')) {
+                document.getElementById('walkthrough-title').textContent = t('walkthrough');
+            }
         }
 
         // 点击开始游戏
@@ -388,6 +400,9 @@
             
             // 记录历史
             saveToHistory(game.id);
+            
+            // 初始化 Walkthroughs 攻略视频
+            initWalkthrough();
         } else {
             alert(t('gameNotFound'));
             window.location.href = "index.html";
@@ -409,6 +424,42 @@
                          onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzMzMyIvPjwvc3ZnPg=='">
                 </a>
             `).join('');
+        }
+
+        // ========== Walkthroughs 攻略视频 ==========
+        function initWalkthrough() {
+            if (!game || !game.url) return;
+            
+            // 从游戏 URL 中提取 hash
+            const hashMatch = game.url.match(/gamemonetize\.com\/([a-z0-9]+)/i);
+            if (!hashMatch) {
+                // 没有 hash，隐藏攻略视频区域
+                const card = document.getElementById('walkthrough-card');
+                if (card) card.style.display = 'none';
+                return;
+            }
+            
+            const gameHash = hashMatch[1];
+            
+            // 设置 VIDEO_OPTIONS
+            window.VIDEO_OPTIONS = {
+                gameid: gameHash,
+                width: "100%",
+                height: "280px",
+                color: "#6c5ce7",
+                getAds: "true"
+            };
+            
+            // 加载 GameMonetize 视频 API
+            (function(a, b, c) {
+                var d = a.getElementsByTagName(b)[0];
+                if (!a.getElementById(c)) {
+                    var s = a.createElement(b);
+                    s.id = c;
+                    s.src = "https://api.gamemonetize.com/video.js";
+                    d.parentNode.insertBefore(s, d);
+                }
+            })(document, "script", "gamemonetize-video-api");
         }
 
         // ========== 全屏功能 (Zero Reload) ==========
