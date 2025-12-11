@@ -120,6 +120,16 @@ games.forEach(game => {
     const canonicalLink = `<link rel="canonical" href="${fileUrl}">`;
     html = html.replace('</head>', `${canonicalLink}\n</head>`);
 
+    // 4.2 修正相对路径 (因为文件在 games/ 目录下)
+    // style.css -> ../style.css
+    html = html.replace('href="style.css"', 'href="../style.css"');
+    // games.js -> ../games.js
+    html = html.replace('src="games.js"', 'src="../games.js"');
+    // index.html -> ../index.html (Logo & Back button)
+    html = html.replace(/href="index\.html"/g, 'href="../index.html"');
+    // 如果有本地图片 images/ -> ../images/ (目前主要是CDN，但以防万一)
+    html = html.replace(/src="images\//g, 'src="../images/');
+
     // 4.2 注入游戏数据到 JS
     // 我们需要通过 JS 告诉页面 "当前是哪个游戏"，而不需要读取 URL 参数
     // 我们可以注入一段 script 在 head 里
