@@ -1,0 +1,4 @@
+*.py
+node_modules/
+scripts/temp_games_data.js
+.DS_Store

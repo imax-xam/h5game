@@ -5,29 +5,32 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-B2QM852L34"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-      gtag('config', 'G-B2QM852L34');
+        gtag('config', 'G-B2QM852L34');
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>H5 Game Station - Play Free Online Games (No Download)</title>
     <meta name="description"
         content="Play thousands of free online HTML5 games on mobile and PC. No download required. Unblocked games, Puzzle, Action, Racing, Shooting, and more! Instant play.">
-    <meta name="keywords" content="H5 games, HTML5 games, free online games, unblocked games, browser games, mobile games, no download games, play instantly, casual games">
+    <meta name="keywords"
+        content="H5 games, HTML5 games, free online games, unblocked games, browser games, mobile games, no download games, play instantly, casual games">
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://h5game.lol/">
     <meta property="og:title" content="H5 Game Station - Play Free Online Games">
-    <meta property="og:description" content="Play instant HTML5 games on any device. No download, no install. Just click and play!">
+    <meta property="og:description"
+        content="Play instant HTML5 games on any device. No download, no install. Just click and play!">
     <meta property="og:image" content="https://h5game.lol/og-image.jpg">
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:title" content="H5 Game Station - Play Free Online Games">
-    <meta property="twitter:description" content="Play instant HTML5 games on any device. No download, no install. Just click and play!">
-    
+    <meta property="twitter:description"
+        content="Play instant HTML5 games on any device. No download, no install. Just click and play!">
+
     <!-- SEO: JSON-LD Structured Data -->
     <script type="application/ld+json">
     [
@@ -74,7 +77,8 @@
         <div class="header-right">
             <!-- History Dropdown -->
             <div class="history-wrapper">
-                <button class="history-btn" id="history-toggle-btn" onclick="toggleHistory()" title="Recently Played">🕒</button>
+                <button class="history-btn" id="history-toggle-btn" onclick="toggleHistory()"
+                    title="Recently Played">🕒</button>
                 <div class="history-dropdown" id="history-dropdown">
                     <div class="history-header">
                         <span id="dropdown-title">Recently Played</span>
@@ -118,13 +122,15 @@
                 <h3><span id="hot-title">🔥 Hot Games</span></h3>
                 <div class="hot-nav">
                     <button class="hot-nav-btn" onclick="scrollHotGames(-1)" aria-label="Scroll left">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M15 18l-6-6 6-6"/>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M15 18l-6-6 6-6" />
                         </svg>
                     </button>
                     <button class="hot-nav-btn" onclick="scrollHotGames(1)" aria-label="Scroll right">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 18l6-6-6-6"/>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M9 18l6-6-6-6" />
                         </svg>
                     </button>
                 </div>
@@ -139,7 +145,8 @@
         <!-- 搜索框 -->
         <div class="search-section">
             <div class="search-container">
-                <input type="text" id="search-input" class="search-input" placeholder="Search games..." autocomplete="off">
+                <input type="text" id="search-input" class="search-input" placeholder="Search games..."
+                    autocomplete="off">
                 <button class="search-btn" onclick="performSearch()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8"></circle>
@@ -202,21 +209,21 @@
         // 更新语言UI
         function updateLanguageUI() {
             // 更新语言按钮状态
-            if(document.getElementById('lang-zh')) document.getElementById('lang-zh').classList.toggle('active', currentLang === 'zh');
-            if(document.getElementById('lang-en')) document.getElementById('lang-en').classList.toggle('active', currentLang === 'en');
+            if (document.getElementById('lang-zh')) document.getElementById('lang-zh').classList.toggle('active', currentLang === 'zh');
+            if (document.getElementById('lang-en')) document.getElementById('lang-en').classList.toggle('active', currentLang === 'en');
 
             // 更新页面文字
-            if(document.getElementById('site-title')) document.getElementById('site-title').textContent = t('siteTitle');
-            if(document.getElementById('games-label')) document.getElementById('games-label').textContent = t('gamesCount');
-            if(document.getElementById('showing-label')) document.getElementById('showing-label').textContent = t('showingGames');
-            if(document.getElementById('load-more-btn')) document.getElementById('load-more-btn').textContent = t('loadMore');
-            if(document.getElementById('footer-text')) document.getElementById('footer-text').textContent = t('footer');
-            if(document.getElementById('privacy-link')) document.getElementById('privacy-link').textContent = t('privacy');
-            if(document.getElementById('about-link')) document.getElementById('about-link').textContent = t('about');
-            if(document.getElementById('daily-title')) document.getElementById('daily-title').textContent = t('dailyPicks');
-            if(document.getElementById('hot-title')) document.getElementById('hot-title').textContent = t('hotGames');
-            if(document.getElementById('dropdown-title')) document.getElementById('dropdown-title').textContent = t('recentlyPlayed');
-            if(document.getElementById('search-input')) document.getElementById('search-input').placeholder = t('searchPlaceholder');
+            if (document.getElementById('site-title')) document.getElementById('site-title').textContent = t('siteTitle');
+            if (document.getElementById('games-label')) document.getElementById('games-label').textContent = t('gamesCount');
+            if (document.getElementById('showing-label')) document.getElementById('showing-label').textContent = t('showingGames');
+            if (document.getElementById('load-more-btn')) document.getElementById('load-more-btn').textContent = t('loadMore');
+            if (document.getElementById('footer-text')) document.getElementById('footer-text').textContent = t('footer');
+            if (document.getElementById('privacy-link')) document.getElementById('privacy-link').textContent = t('privacy');
+            if (document.getElementById('about-link')) document.getElementById('about-link').textContent = t('about');
+            if (document.getElementById('daily-title')) document.getElementById('daily-title').textContent = t('dailyPicks');
+            if (document.getElementById('hot-title')) document.getElementById('hot-title').textContent = t('hotGames');
+            if (document.getElementById('dropdown-title')) document.getElementById('dropdown-title').textContent = t('recentlyPlayed');
+            if (document.getElementById('search-input')) document.getElementById('search-input').placeholder = t('searchPlaceholder');
             document.title = `${t('siteTitle')} - ${t('siteSubtitle')}`;
         }
 
@@ -249,7 +256,7 @@
 
             gamesToRender.forEach(game => {
                 const card = document.createElement('a');
-                card.href = `play.html?id=${game.id}`;
+                card.href = getGameUrl(game);
                 card.className = 'game-card';
 
                 const imgError = "this.onerror=null;this.parentElement.style.background='#222';this.style.display='none';";
@@ -283,15 +290,15 @@
         function renderHeroSlider(games) {
             const container = document.getElementById('hero-slider');
             if (!container) return;
-            
+
             container.innerHTML = '';
-            
+
             // Slides
             games.forEach((game, index) => {
                 const activeClass = index === 0 ? 'active' : '';
                 const slide = document.createElement('div');
                 slide.className = `hero-slide ${activeClass}`;
-                
+
                 slide.innerHTML = `
                     <div class="hero-bg" style="background-image: url('${game.thumbnail}')"></div>
                     <div class="hero-content">
@@ -314,7 +321,7 @@
                 `;
                 container.appendChild(slide);
             });
-            
+
             // Dots
             const dotsContainer = document.createElement('div');
             dotsContainer.className = 'hero-dots';
@@ -325,29 +332,29 @@
                 dotsContainer.appendChild(dot);
             });
             container.appendChild(dotsContainer);
-            
+
             // Auto Play
             startHeroAutoPlay(games.length);
         }
-        
+
         function switchHeroSlide(index) {
             const slides = document.querySelectorAll('.hero-slide');
             const dots = document.querySelectorAll('.hero-dot');
             if (slides.length === 0) return;
-            
+
             if (index >= slides.length) index = 0;
             if (index < 0) index = slides.length - 1;
             currentHeroIndex = index;
-            
+
             slides.forEach(s => s.classList.remove('active'));
             dots.forEach(d => d.classList.remove('active'));
-            
-            if(slides[index]) slides[index].classList.add('active');
-            if(dots[index]) dots[index].classList.add('active');
-            
+
+            if (slides[index]) slides[index].classList.add('active');
+            if (dots[index]) dots[index].classList.add('active');
+
             startHeroAutoPlay(slides.length);
         }
-        
+
         function startHeroAutoPlay(count) {
             if (heroInterval) clearInterval(heroInterval);
             heroInterval = setInterval(() => {
@@ -359,12 +366,12 @@
         function renderSpecialSections() {
             // Daily (Hero Slider)
             try {
-                const dailyGames = getDailyFeaturedGames(5); 
+                const dailyGames = getDailyFeaturedGames(5);
                 renderHeroSlider(dailyGames);
             } catch (e) {
                 console.warn('Daily section error:', e);
             }
-            
+
             // Hot Games Section
             try {
                 const hotGames = getHotGames(16);
@@ -375,7 +382,7 @@
             } catch (e) {
                 console.warn('Hot games section error:', e);
             }
-            
+
             // History (Dropdown)
             try {
                 const historyGames = getHistoryGames();
@@ -391,7 +398,7 @@
         // 渲染热门游戏卡片（紧凑样式，两行横向滚动）
         function renderHotGamesCards(games, container) {
             const html = games.map(g => `
-                <a href="play.html?id=${g.id}" class="game-card hot-card">
+                <a href="${getGameUrl(g)}" class="game-card hot-card">
                     <div class="hot-thumb">
                         <img src="${g.thumbnail}" alt="${getGameTitle(g)}" loading="lazy" 
                              onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%231a1a2e%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 text-anchor=%22middle%22 fill=%22%236c5ce7%22 font-size=%2240%22>🎮</text></svg>'">
@@ -411,7 +418,7 @@
                 container.innerHTML = `<div class="history-empty">No games played yet</div>`;
                 return;
             }
-            
+
             const html = games.map(g => `
                 <a href="play.html?id=${g.id}" class="history-item">
                     <img src="${g.thumbnail}" class="history-thumb" alt="${getGameTitle(g)}">
@@ -433,7 +440,7 @@
         }
 
         // Close dropdown when clicking outside
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             const dropdown = document.getElementById('history-dropdown');
             const btn = document.getElementById('history-toggle-btn');
             if (dropdown && btn && !dropdown.contains(e.target) && !btn.contains(e.target)) {
@@ -491,15 +498,15 @@
         function fuzzyMatch(str, pattern) {
             str = str.toLowerCase();
             pattern = pattern.toLowerCase();
-            
+
             // 完全包含
             if (str.includes(pattern)) return { match: true, score: 100 };
-            
+
             // 拼音首字母或单词首字母匹配
             const words = str.split(/\s+/);
             const initials = words.map(w => w[0]).join('');
             if (initials.includes(pattern)) return { match: true, score: 80 };
-            
+
             // 模糊匹配 - 字符顺序匹配
             let patternIdx = 0;
             let score = 0;
@@ -512,7 +519,7 @@
             if (patternIdx === pattern.length) {
                 return { match: true, score: score };
             }
-            
+
             // Levenshtein 距离 - 允许少量错误
             const distance = levenshteinDistance(str, pattern);
             const maxLen = Math.max(str.length, pattern.length);
@@ -520,7 +527,7 @@
             if (similarity > 0.5) {
                 return { match: true, score: similarity * 50 };
             }
-            
+
             return { match: false, score: 0 };
         }
 
@@ -535,13 +542,13 @@
             }
             for (let i = 1; i <= b.length; i++) {
                 for (let j = 1; j <= a.length; j++) {
-                    if (b[i-1] === a[j-1]) {
-                        matrix[i][j] = matrix[i-1][j-1];
+                    if (b[i - 1] === a[j - 1]) {
+                        matrix[i][j] = matrix[i - 1][j - 1];
                     } else {
                         matrix[i][j] = Math.min(
-                            matrix[i-1][j-1] + 1,
-                            matrix[i][j-1] + 1,
-                            matrix[i-1][j] + 1
+                            matrix[i - 1][j - 1] + 1,
+                            matrix[i][j - 1] + 1,
+                            matrix[i - 1][j] + 1
                         );
                     }
                 }
@@ -552,38 +559,38 @@
         // 搜索游戏
         function searchGames(query) {
             if (!query || query.length < 1) return [];
-            
+
             const results = [];
             const queryLower = query.toLowerCase();
-            
+
             games.forEach(game => {
                 const title = getGameTitle(game).toLowerCase();
                 const titleEn = game.title.toLowerCase();
                 const desc = getGameDesc(game).toLowerCase();
                 const category = game.category.toLowerCase();
-                
+
                 // 多字段匹配
                 let bestScore = 0;
-                
+
                 // 标题匹配权重最高
                 const titleMatch = fuzzyMatch(title, queryLower);
                 if (titleMatch.match) bestScore = Math.max(bestScore, titleMatch.score * 2);
-                
+
                 const titleEnMatch = fuzzyMatch(titleEn, queryLower);
                 if (titleEnMatch.match) bestScore = Math.max(bestScore, titleEnMatch.score * 2);
-                
+
                 // 描述匹配
                 const descMatch = fuzzyMatch(desc, queryLower);
                 if (descMatch.match) bestScore = Math.max(bestScore, descMatch.score * 0.5);
-                
+
                 // 分类匹配
                 if (category.includes(queryLower)) bestScore = Math.max(bestScore, 60);
-                
+
                 if (bestScore > 0) {
                     results.push({ game, score: bestScore });
                 }
             });
-            
+
             // 按分数排序
             results.sort((a, b) => b.score - a.score);
             return results.map(r => r.game);
@@ -593,7 +600,7 @@
         function getSimilarKeywords(query) {
             const keywords = new Set();
             const queryLower = query.toLowerCase();
-            
+
             games.forEach(game => {
                 const title = getGameTitle(game);
                 const words = title.split(/\s+/);
@@ -606,7 +613,7 @@
                     }
                 });
             });
-            
+
             // 添加分类建议
             const categories = ['puzzle', 'arcade', 'racing', 'shooting', 'action', 'casual', 'sports', 'adventure'];
             categories.forEach(cat => {
@@ -614,7 +621,7 @@
                     keywords.add(getCategoryName(cat));
                 }
             });
-            
+
             return Array.from(keywords).slice(0, 5);
         }
 
@@ -624,12 +631,12 @@
                 searchSuggestions.classList.remove('active');
                 return;
             }
-            
+
             const results = searchGames(query).slice(0, 8);
-            
+
             if (results.length > 0) {
                 const html = results.map(game => `
-                    <a href="play.html?id=${game.id}" class="suggestion-item">
+                    <a href="${getGameUrl(game)}" class="suggestion-item">
                         <img src="${game.thumbnail}" class="suggestion-thumb" alt="" onerror="this.style.display='none'">
                         <div class="suggestion-info">
                             <div class="suggestion-title">${highlightMatch(getGameTitle(game), query)}</div>
@@ -643,7 +650,7 @@
                 const similar = getSimilarKeywords(query);
                 let html = `<div class="search-no-result">
                     <div>😕 ${currentLang === 'zh' ? '未找到' : 'No results for'} "${query}"</div>`;
-                
+
                 if (similar.length > 0) {
                     html += `<div class="similar-title">${currentLang === 'zh' ? '试试这些：' : 'Try these:'}</div>
                         <div>${similar.map(k => `<span class="search-tag" onclick="searchFor('${k}')">${k}</span>`).join('')}</div>`;
@@ -651,7 +658,7 @@
                 html += '</div>';
                 searchSuggestions.innerHTML = html;
             }
-            
+
             searchSuggestions.classList.add('active');
         }
 
@@ -668,33 +675,33 @@
                 clearSearch();
                 return;
             }
-            
+
             searchSuggestions.classList.remove('active');
             currentSearchResults = searchGames(query);
-            
+
             // 显示搜索结果
             const gamesToShow = currentSearchResults.slice(0, GAMES_PER_PAGE);
             renderGames(gamesToShow, false);
-            
+
             // 更新统计
             if (showingCountEl) {
                 showingCountEl.textContent = `${displayedCount} / ${currentSearchResults.length}`;
             }
             if (searchResultText) {
                 searchResultText.style.display = 'inline';
-                searchResultText.textContent = currentLang === 'zh' 
-                    ? `- 搜索 "${query}"` 
+                searchResultText.textContent = currentLang === 'zh'
+                    ? `- 搜索 "${query}"`
                     : `- Search "${query}"`;
             }
-            
+
             // 显示/隐藏加载更多
             if (loadMoreContainer) {
                 loadMoreContainer.style.display = currentSearchResults.length > GAMES_PER_PAGE ? 'block' : 'none';
             }
-            
+
             // 重置分类按钮状态
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            
+
             searchClear.style.display = 'block';
         }
 
@@ -704,11 +711,11 @@
             searchSuggestions.classList.remove('active');
             searchClear.style.display = 'none';
             currentSearchResults = null;
-            
+
             if (searchResultText) {
                 searchResultText.style.display = 'none';
             }
-            
+
             // 恢复默认显示
             filterGames('all', document.querySelector('.filter-btn'));
         }
@@ -722,19 +729,19 @@
         // 初始化搜索事件
         function initSearch() {
             if (!searchInput) return;
-            
+
             // 输入时显示建议
             searchInput.addEventListener('input', (e) => {
                 const query = e.target.value.trim();
                 searchClear.style.display = query ? 'block' : 'none';
-                
+
                 // 防抖
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(() => {
                     showSuggestions(query);
                 }, 150);
             });
-            
+
             // 回车搜索
             searchInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
@@ -743,14 +750,14 @@
                     searchSuggestions.classList.remove('active');
                 }
             });
-            
+
             // 点击外部关闭建议
             document.addEventListener('click', (e) => {
                 if (!e.target.closest('.search-section')) {
                     searchSuggestions.classList.remove('active');
                 }
             });
-            
+
             // 聚焦时如果有内容则显示建议
             searchInput.addEventListener('focus', () => {
                 if (searchInput.value.trim()) {
@@ -823,7 +830,7 @@
                     return;
                 }
                 updateLanguageUI();
-                if(gameCountEl) gameCountEl.textContent = getGameCount();
+                if (gameCountEl) gameCountEl.textContent = getGameCount();
                 initFilters();
                 initSearch();
                 filterGames('all', document.querySelector('.filter-btn'));
@@ -838,4 +845,5 @@
         init();
     </script>
 </body>
+
 </html>
