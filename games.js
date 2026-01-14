@@ -161,7 +161,9 @@ const i18n = {
 };
 
 // 当前语言
-let currentLang = localStorage.getItem('lang') || 'zh';
+const savedLang = localStorage.getItem('lang');
+const browserLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+let currentLang = savedLang || (browserLang.startsWith('zh') ? 'zh' : 'en');
 
 // 获取翻译
 function t(key) {
