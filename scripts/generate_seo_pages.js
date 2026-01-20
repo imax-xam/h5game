@@ -67,32 +67,46 @@ function generateJsonLd(game) {
 function processHtml(template, game, filename) {
     let html = template;
 
-    // 1. Update Preloaded ID
+    // 1. Fix HTML lang attribute - CRITICAL for SEO
+    html = html.replace(
+        /<html lang="zh-CN">/,
+        `<html lang="en">`
+    );
+
+    // 2. Update Preloaded ID
     html = html.replace(
         /window\.PRELOADED_GAME_ID = \d+;/,
         `window.PRELOADED_GAME_ID = ${game.id};`
     );
 
-    // 2. Update Title
-    const pageTitle = `${game.title} (${game.titleZh}) - Play Free Online Game`;
+    // 3. Update Title - English first for better international SEO
+    const pageTitle = `${game.title} - Free Online HTML5 Game | Play ${game.title} Now`;
     html = html.replace(/<title>.*?<\/title>/, `<title>${pageTitle}</title>`);
 
-    // 3. Update Meta Description
-    const fullDesc = `${game.desc} ${game.titleZh} ${game.descZh}`;
-    const fullDescSafe = fullDesc.replace(/"/g, '&quot;');
+    // 4. Update Meta Description - ENGLISH ONLY for better targeting
+    // Keep it under 160 characters for optimal display
+    let metaDesc = game.desc;
+    if (metaDesc.length > 155) {
+        metaDesc = metaDesc.substring(0, 152) + '...';
+    }
+    const metaDescSafe = metaDesc.replace(/"/g, '&quot;');
     html = html.replace(
         /<meta name="description" content=".*?">/,
-        `<meta name="description" content="${fullDescSafe}">`
+        `<meta name="description" content="${metaDescSafe}">`
     );
 
-    // 4. Update Canonical
-    const canonicalUrl = `https://h5game.lol/games/${filename}`;
+    // 5. Add hreflang tags for multilingual SEO
+    const hreflangTags = `
+    <link rel="alternate" hreflang="en" href="https://h5game.lol/games/${filename}" />
+    <link rel="alternate" hreflang="zh" href="https://h5game.lol/games/${filename}" />
+    <link rel="alternate" hreflang="x-default" href="https://h5game.lol/games/${filename}" />`;
+
     html = html.replace(
         /<link rel="canonical" href=".*?">/,
-        `<link rel="canonical" href="${canonicalUrl}">`
+        `<link rel="canonical" href="https://h5game.lol/games/${filename}">${hreflangTags}`
     );
 
-    // 5. Inject Content (SSR Simulation)
+    // 6. Inject Content (SSR Simulation) - Keep bilingual for JS switching
 
     // Title
     html = html.replace(
@@ -109,24 +123,24 @@ function processHtml(template, game, filename) {
         );
     }
 
-    // Description
+    // Description - Use English description for initial render
     html = html.replace(
         '<p id="game-desc-display" class="info-desc">Loading...</p>',
-        `<p id="game-desc-display" class="info-desc">${fullDesc}</p>`
+        `<p id="game-desc-display" class="info-desc">${game.desc}</p>`
     );
 
-    // Category
-    const catMap = {
-        'puzzle': '益智解谜', 'action': '动作冒险', 'racing': '赛车竞速',
-        'shooting': '射击游戏', 'arcade': '经典街机', 'casual': '休闲娱乐',
-        'adventure': '冒险探索', 'sports': '体育运动', 'hypercasual': '超休闲'
+    // Category - Use English category names
+    const catMapEn = {
+        'puzzle': 'Puzzle', 'action': 'Action', 'racing': 'Racing',
+        'shooting': 'Shooting', 'arcade': 'Arcade', 'casual': 'Casual',
+        'adventure': 'Adventure', 'sports': 'Sports', 'hypercasual': 'Hypercasual'
     };
     const catKey = (game.category || '').toLowerCase();
-    const catZh = catMap[catKey] || game.category;
+    const catEn = catMapEn[catKey] || game.category;
 
     html = html.replace(
         '<span id="game-category-display" class="game-tag">-</span>',
-        `<span id="game-category-display" class="game-tag cat-${game.category}">${catZh}</span>`
+        `<span id="game-category-display" class="game-tag cat-${game.category}">${catEn}</span>`
     );
 
     // Controls Info sidebar
@@ -135,14 +149,14 @@ function processHtml(template, game, filename) {
         `<span id="game-controls-info" class="info-value">${controls || 'Mouse/Touch'}</span>`
     );
 
-    // Tips
-    const tipsText = "• 点击游戏画面聚焦后操作\n• 全屏模式获得更好体验\n• 部分游戏需等待加载";
+    // Tips - Use English for initial render
+    const tipsText = "• Click game area to focus\n• Fullscreen for better experience\n• Some games need loading time";
     html = html.replace(
         '<p id="tips-content" class="info-desc tips-text"></p>',
         `<p id="tips-content" class="info-desc tips-text">${tipsText}</p>`
     );
 
-    // 6. JSON-LD
+    // 7. JSON-LD with enhanced SEO data
     const jsonLd = generateJsonLd(game);
     const scriptTag = `\n    <script type="application/ld+json">\n${jsonLd}\n    </script>`;
     html = html.replace('</head>', `${scriptTag}\n</head>`);
